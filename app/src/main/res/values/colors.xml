@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="MotionCP">#5AB6DB</color>
+
+    <color name="Gradient_Motion">@color/Gradient_Motion</color>
+
+</resources>
