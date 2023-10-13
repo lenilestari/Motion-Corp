@@ -127,8 +127,11 @@ class MainActivity : AppCompatActivity() {
                 replace(HomeFragment())
                 bottomNavigation.show(ID_HOME, true)
             } else {
-                super.onBackPressed()
+//                super.onBackPressed()
+                bottomNavigation.show(ID_HOME, true)
+                currentFragment = HomeFragment()
             }
+
         }
     }
 
