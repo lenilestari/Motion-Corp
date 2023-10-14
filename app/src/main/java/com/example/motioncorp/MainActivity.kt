@@ -1,6 +1,7 @@
+package com.example.motioncorp
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation
 import com.example.motioncorp.Fragment.HomeFragment
@@ -8,7 +9,6 @@ import com.example.motioncorp.Fragment.InfoFragment
 import com.example.motioncorp.Fragment.NewsFragment
 import com.example.motioncorp.Fragment.RadioFragment
 import com.example.motioncorp.Fragment.TelevisiFragment
-import com.example.motioncorp.R
 import com.example.motioncorp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -52,6 +52,13 @@ class MainActivity : AppCompatActivity() {
             } else {
                 super.onBackPressed()
             }
+        }
+
+        // Periksa apakah ada fragment saat ini
+        if (currentFragment == null) {
+            // Jika tidak ada fragment yang ditampilkan, tampilkan HomeFragment
+            replace(HomeFragment())
+            setBottomNavigationItem(HomeFragment::class.java.simpleName)
         }
     }
 
@@ -113,24 +120,26 @@ class MainActivity : AppCompatActivity() {
         currentFragment = fragment
     }
 
-    override fun onBackPressed() {
-        Log.d("MainActivity", "onBackPressed() called")
-        val fragmentManager = supportFragmentManager
-        val fragmentCount = fragmentManager.backStackEntryCount
-        if (fragmentCount > 0) {
-            fragmentManager.popBackStack()
-            val fragmentTag = fragmentManager.getBackStackEntryAt(fragmentCount - 1).name
-            setBottomNavigationItem(fragmentTag)
-            currentFragment = fragmentManager.findFragmentByTag(fragmentTag)
-        } else {
-            if (currentFragment !is HomeFragment) {
-                replace(HomeFragment())
-                bottomNavigation.show(ID_HOME, true)
-            } else {
-                super.onBackPressed()
-            }
-        }
-    }
+//    override fun onBackPressed() {
+//        val fragmentManager = supportFragmentManager
+//        val fragmentCount = fragmentManager.backStackEntryCount
+//        if (fragmentCount > 0) {
+//            // Jika ada fragment di tumpukan, tampilkan fragment sebelumnya
+//            fragmentManager.popBackStack()
+//            val fragmentTag = fragmentManager.getBackStackEntryAt(fragmentCount - 1).name
+//            setBottomNavigationItem(fragmentTag)
+//            currentFragment = fragmentManager.findFragmentByTag(fragmentTag)
+//        } else {
+//            if (currentFragment !is HomeFragment) {
+//                // Jika tidak ada fragment di tumpukan, dan fragment saat ini bukan HomeFragment, tampilkan HomeFragment
+//                replace(HomeFragment())
+//                setBottomNavigationItem(HomeFragment::class.java.simpleName)
+//            } else {
+//                super.onBackPressed()
+//            }
+//        }
+//    }
+
 
 
 }

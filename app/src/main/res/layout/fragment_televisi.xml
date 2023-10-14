@@ -6,17 +6,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragment.TelevisiFragment">
 
-    <TextView
-        android:id="@+id/T_TelevisiFragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TELEVISI"
-        android:layout_gravity="center"
-        android:textColor="@color/MotionCP"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <WebView
+        android:id="@+id/WebView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </FrameLayout>

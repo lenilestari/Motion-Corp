@@ -40,6 +40,11 @@ class HomeFragment : Fragment() {
                 url: String
             ): Boolean {
                 view.loadUrl(url)
+
+                view.loadUrl("javascript:(function() { " +
+                        "document.getElementById('header').style.display='none'; " +
+                        "})()");
+
                 return true
 
 

@@ -6,13 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragment.HomeFragment">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="213dp"
-        android:layout_height="108dp"
-        android:text="Test"
-        tools:ignore="MissingConstraints" />
-
     <WebView
         android:id="@+id/WebView1"
         android:layout_width="match_parent"
