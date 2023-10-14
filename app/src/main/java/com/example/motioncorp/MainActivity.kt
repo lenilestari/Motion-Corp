@@ -1,5 +1,3 @@
-package com.example.motioncorp
-
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -115,24 +113,24 @@ class MainActivity : AppCompatActivity() {
         currentFragment = fragment
     }
 
-//    override fun onBackPressed() {
-//        Log.d("MainActivity", "onBackPressed() called")
-//        val fragmentManager = supportFragmentManager
-//        val fragmentCount = fragmentManager.backStackEntryCount
-//        if (fragmentCount > 0) {
-//            fragmentManager.popBackStack()
-//            val fragmentTag = fragmentManager.getBackStackEntryAt(fragmentCount - 1).name
-//            setBottomNavigationItem(fragmentTag)
-//            currentFragment = fragmentManager.findFragmentByTag(fragmentTag)
-//        } else {
-//            if (currentFragment !is HomeFragment) {
-//                replace(HomeFragment())
-//                bottomNavigation.show(ID_HOME, true)
-//            } else {
-//                super.onBackPressed()
-//            }
-//        }
-//    }
+    override fun onBackPressed() {
+        Log.d("MainActivity", "onBackPressed() called")
+        val fragmentManager = supportFragmentManager
+        val fragmentCount = fragmentManager.backStackEntryCount
+        if (fragmentCount > 0) {
+            fragmentManager.popBackStack()
+            val fragmentTag = fragmentManager.getBackStackEntryAt(fragmentCount - 1).name
+            setBottomNavigationItem(fragmentTag)
+            currentFragment = fragmentManager.findFragmentByTag(fragmentTag)
+        } else {
+            if (currentFragment !is HomeFragment) {
+                replace(HomeFragment())
+                bottomNavigation.show(ID_HOME, true)
+            } else {
+                super.onBackPressed()
+            }
+        }
+    }
 
 
 }
