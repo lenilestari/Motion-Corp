@@ -64,7 +64,7 @@ class HomeFragment : Fragment() {
         })
 
 
-        myWebView.loadUrl("https://youtube.com")
+        myWebView.loadUrl("https://motioncorpbymmtc.id/")
         myWebView.settings.javaScriptEnabled = true
         myWebView.settings.allowContentAccess = true
         myWebView.settings.domStorageEnabled = true
