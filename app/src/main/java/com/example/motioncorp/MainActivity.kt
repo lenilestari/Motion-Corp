@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 
         val fragmentManager = supportFragmentManager
 
-        // Inisialisasi fungsi untuk tombol kembali
+//        // Inisialisasi fungsi untuk tombol kembali
         customToolbar.Back.setOnClickListener {
             val fragmentCount = fragmentManager.backStackEntryCount
             if (fragmentCount > 0) {
@@ -49,10 +49,13 @@ class MainActivity : AppCompatActivity() {
                 // Mengatur bottom navigation sesuai dengan fragment saat ini
                 setBottomNavigationItem(fragmentTag)
                 currentFragment = fragmentManager.findFragmentByTag(fragmentTag)
+
             } else {
                 super.onBackPressed()
             }
         }
+
+
 
         // Periksa apakah ada fragment saat ini
         if (currentFragment == null) {
@@ -61,6 +64,7 @@ class MainActivity : AppCompatActivity() {
             setBottomNavigationItem(HomeFragment::class.java.simpleName)
         }
     }
+
 
     private fun initializeBottomNavigation() {
         bottomNavigation.add(MeowBottomNavigation.Model(ID_HOME, R.drawable.ic_home))

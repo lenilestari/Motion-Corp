@@ -4,7 +4,6 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="MotionCP">#5AB6DB</color>
-
-    <color name="Gradient_Motion">@color/Gradient_Motion</color>
+    <color name="bgAtas">#1d434f</color>
 
 </resources>

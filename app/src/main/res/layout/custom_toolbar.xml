@@ -7,7 +7,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/MotionCP">
+        android:background="@color/bgAtas">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/Back"
