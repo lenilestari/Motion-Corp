@@ -13,7 +13,7 @@ import com.example.motioncorp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding : ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
     private lateinit var bottomNavigation: MeowBottomNavigation
     private val ID_HOME = 1
     private val ID_TELEVISI = 2
@@ -31,33 +31,56 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
 
         // Inisialisasi UI komponen
-        val customToolbar = binding.customToolbar
+//        val customToolbar = binding.customToolbar
         bottomNavigation = findViewById(R.id.bottomNavigation)
 
         // Inisialisasi bottomNavigation
         initializeBottomNavigation()
+//        new line ini
+        initializeFragmentMeow()
 
-        val fragmentManager = supportFragmentManager
+//        val fragmentManager = supportFragmentManager
 
 //        // Inisialisasi fungsi untuk tombol kembali
-        customToolbar.Back.setOnClickListener {
-            val fragmentCount = fragmentManager.backStackEntryCount
-            if (fragmentCount > 0) {
-                // Jika ada fragment di tumpukan, tampilkan fragment sebelumnya
-                fragmentManager.popBackStack()
-                val fragmentTag = fragmentManager.getBackStackEntryAt(fragmentCount - 1).name
-                // Mengatur bottom navigation sesuai dengan fragment saat ini
-                setBottomNavigationItem(fragmentTag)
-                currentFragment = fragmentManager.findFragmentByTag(fragmentTag)
-
-            } else {
-                super.onBackPressed()
-            }
-        }
-
+//        customToolbar.Back.setOnClickListener {
+//            val fragmentCount = fragmentManager.backStackEntryCount
+//            if (fragmentCount > 0) {
+//                // Jika ada fragment di tumpukan, tampilkan fragment sebelumnya
+//                fragmentManager.popBackStack()
+//                val fragmentTag = fragmentManager.getBackStackEntryAt(fragmentCount - 1).name
+//                // Mengatur bottom navigation sesuai dengan fragment saat ini
+//                setBottomNavigationItem(fragmentTag)
+//                currentFragment = fragmentManager.findFragmentByTag(fragmentTag)
+//
+//            } else {
+//                super.onBackPressed()
+//            }
+//        }
 
 
         // Periksa apakah ada fragment saat ini
+//        if (currentFragment == null) {
+//            // Jika tidak ada fragment yang ditampilkan, tampilkan HomeFragment
+//            replace(HomeFragment())
+//            setBottomNavigationItem(HomeFragment::class.java.simpleName)
+//        }
+    }
+
+    private fun initializeFragmentMeow() {
+        val fragmentManager = supportFragmentManager
+        val fragmentCount = fragmentManager.backStackEntryCount
+        if (fragmentCount > 0) {
+            // Jika ada fragment di tumpukan, tampilkan fragment sebelumnya
+            fragmentManager.popBackStack()
+            val fragmentTag = fragmentManager.getBackStackEntryAt(fragmentCount - 1).name
+            // Mengatur bottom navigation sesuai dengan fragment saat ini
+            setBottomNavigationItem(fragmentTag)
+            currentFragment = fragmentManager.findFragmentByTag(fragmentTag)
+
+        } else {
+            super.onBackPressed()
+        }
+
         if (currentFragment == null) {
             // Jika tidak ada fragment yang ditampilkan, tampilkan HomeFragment
             replace(HomeFragment())
@@ -79,15 +102,19 @@ class MainActivity : AppCompatActivity() {
                 ID_HOME -> {
                     replace(HomeFragment())
                 }
+
                 ID_TELEVISI -> {
                     replace(TelevisiFragment())
                 }
+
                 ID_RADIO -> {
                     replace(RadioFragment())
                 }
+
                 ID_NEWS -> {
                     replace(NewsFragment())
                 }
+
                 ID_INFO -> {
                     replace(InfoFragment())
                 }
@@ -100,15 +127,19 @@ class MainActivity : AppCompatActivity() {
             HomeFragment::class.java.simpleName -> {
                 bottomNavigation.show(ID_HOME, true)
             }
+
             TelevisiFragment::class.java.simpleName -> {
                 bottomNavigation.show(ID_TELEVISI, true)
             }
+
             RadioFragment::class.java.simpleName -> {
                 bottomNavigation.show(ID_RADIO, true)
             }
+
             NewsFragment::class.java.simpleName -> {
                 bottomNavigation.show(ID_NEWS, true)
             }
+
             InfoFragment::class.java.simpleName -> {
                 bottomNavigation.show(ID_INFO, true)
             }
@@ -143,7 +174,6 @@ class MainActivity : AppCompatActivity() {
 //            }
 //        }
 //    }
-
 
 
 }
