@@ -21,7 +21,10 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private val url = "https://motioncorpbymmtc.id/"
+    private val url1 = "https://motioncorpbymmtc.id/"
+    private val url2 = "https://tv.motioncorpbymmtc.id/"
+    private val url3 = "https://tv.motioncorpbymmtc.id/motion-tv-live/"
+    private var currentUrl: String = url1 // Menyimpan URL saat ini
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,16 +42,22 @@ class HomeFragment : Fragment() {
         val myWebView: WebView = view.findViewById(R.id.WebView1)
         myWebView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(
-                view: WebView,
-                url: String
+                view: WebView?,
+                url: String?
             ): Boolean {
-                view.loadUrl(url)
-                return true
+                if (url == "https://tv.motioncorpbymmtc.id/") {
+                    MyAsyncTask(myWebView).execute(url2)
+                    return true
+                } else if (url == "https://tv.motioncorpbymmtc.id/motion-tv-live/") {
+                    MyAsyncTask(myWebView).execute(url3)
+                    return true
+                }
+                return false
             }
         }
+
         val webSetting: WebSettings = myWebView.settings
         webSetting.javaScriptEnabled = true
-        myWebView.webViewClient = WebViewClient()
 
         myWebView.canGoBack()
         myWebView.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
@@ -63,7 +72,7 @@ class HomeFragment : Fragment() {
         })
 
         // Menggunakan AsyncTask untuk mengambil dan memproses HTML
-        MyAsyncTask(myWebView).execute(url)
+        MyAsyncTask(myWebView).execute(url1)
     }
 
     private inner class MyAsyncTask(private val webView: WebView) : AsyncTask<String, Void, String>() {
@@ -74,6 +83,10 @@ class HomeFragment : Fragment() {
                 document = Jsoup.connect(url).get()
                 document.getElementsByClass("elementor elementor-867 elementor-location-header").remove()
                 document.getElementsByClass("elementor elementor-880 elementor-location-footer").remove()
+                document.getElementsByClass("elementor elementor-24 elementor-location-header").remove()
+                document.getElementsByClass("elementor elementor-40 elementor-location-footer").remove()
+                document.getElementsByClass("elementor elementor-132 elementor-location-header").remove()
+                document.getElementsByClass("elementor elementor-40 elementor-location-footer").remove()
             } catch (e: IOException) {
                 e.printStackTrace()
             }
@@ -84,7 +97,7 @@ class HomeFragment : Fragment() {
             super.onPostExecute(html)
             if (html != null) {
                 val modifiedHtml = "<html>$html</html>"
-                webView.loadDataWithBaseURL(url, modifiedHtml, "text/html", "utf-8", "")
+                webView.loadDataWithBaseURL(currentUrl, modifiedHtml, "text/html", "utf-8", "")
                 webView.settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
             }
         }
