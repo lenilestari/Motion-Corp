@@ -84,6 +84,7 @@ class TelevisiFragment : Fragment() {
                 document.getElementsByClass("elementor elementor-40 elementor-location-footer").remove()
                 document.getElementsByClass("elementor elementor-132 elementor-location-header").remove()
                 document.getElementsByClass("elementor elementor-40 elementor-location-footer").remove()
+                document.getElementsByClass("elementor-element elementor-element-5338298 elementor-mobile-align-right elementor-widget elementor-widget-button").remove()
             } catch (e: IOException) {
                 e.printStackTrace()
             }
