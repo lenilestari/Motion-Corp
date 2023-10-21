@@ -12,9 +12,7 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.example.motioncorp.R
-import com.example.motioncorp.databinding.FragmentHomeBinding
 import com.example.motioncorp.databinding.FragmentNewsBinding
-import com.example.motioncorp.databinding.FragmentRadioBinding
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import java.io.IOException
@@ -36,6 +34,12 @@ class NewsFragment : Fragment() {
     private val url11 = "https://news.motioncorpbymmtc.id/infografis/"
     private val url12 = "https://news.motioncorpbymmtc.id/video/"
     private val url13 = "https://news.motioncorpbymmtc.id/cek-fakta/"
+    private val url14 = "https://news.motioncorpbymmtc.id/fakta-patung-pancoran-karya-edhi-sunarso/"
+    private val url15 = "https://news.motioncorpbymmtc.id/papeda-mendunia-google-doodle-menampilkan-tema-merayakan-papeda/"
+    private val url16 = "https://news.motioncorpbymmtc.id/prediksi-bacawapres-pendamping-prabowo-di-pilpres-2024/"
+    private val url17 = "https://news.motioncorpbymmtc.id/mengenal-batik-durian-yang-berhasil-eksis-di-milan-fashion-week/"
+    private val url18 = "https://news.motioncorpbymmtc.id/johnny-plate-akui-menyesal-proyek-bts-4g-tak-rampung/"
+    private val url19 = "https://news.motioncorpbymmtc.id/capai-work-life-balance-untuk-tingkatkan-produktivitas-kerja/"
     private var currentUrl: String = url1 // Menyimpan URL saat ini
 
     override fun onCreateView(
@@ -104,6 +108,30 @@ class NewsFragment : Fragment() {
                     MyAsyncTask(myWebView).execute(url13)
                     return true
                 }
+                else if (url == "https://news.motioncorpbymmtc.id/fakta-patung-pancoran-karya-edhi-sunarso/"){
+                    MyAsyncTask(myWebView).execute(url14)
+                    return true
+                }
+                else if (url == "https://news.motioncorpbymmtc.id/papeda-mendunia-google-doodle-menampilkan-tema-merayakan-papeda/") {
+                    MyAsyncTask(myWebView).execute(url15)
+                    return true
+                }
+                else if (url == "https://news.motioncorpbymmtc.id/prediksi-bacawapres-pendamping-prabowo-di-pilpres-2024/") {
+                    MyAsyncTask(myWebView).execute(url16)
+                    return true
+                }
+                else if (url == "https://news.motioncorpbymmtc.id/mengenal-batik-durian-yang-berhasil-eksis-di-milan-fashion-week/") {
+                    MyAsyncTask(myWebView).execute(url17)
+                    return true
+                }
+                else if (url == "https://news.motioncorpbymmtc.id/johnny-plate-akui-menyesal-proyek-bts-4g-tak-rampung/") {
+                    MyAsyncTask(myWebView).execute(url18)
+                    return true
+                }
+                else if (url == "https://news.motioncorpbymmtc.id/capai-work-life-balance-untuk-tingkatkan-produktivitas-kerja/") {
+                    MyAsyncTask(myWebView).execute(url19)
+                    return true
+                }
                 return false
             }
         }
@@ -134,11 +162,13 @@ class NewsFragment : Fragment() {
             try {
                 document = Jsoup.connect(url).get()
                 document.getElementsByClass("elementor elementor-490 elementor-location-footer").remove()
+                document.getElementsByClass("elementor-button-wrapper").remove()
             } catch (e: IOException) {
                 e.printStackTrace()
             }
             return document?.toString()
         }
+
 
         override fun onPostExecute(html: String?) {
             super.onPostExecute(html)
