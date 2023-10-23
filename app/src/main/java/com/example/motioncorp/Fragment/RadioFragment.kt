@@ -12,7 +12,6 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.example.motioncorp.R
-import com.example.motioncorp.databinding.FragmentHomeBinding
 import com.example.motioncorp.databinding.FragmentRadioBinding
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -83,9 +82,15 @@ class RadioFragment : Fragment() {
             try {
                 document = Jsoup.connect(url).get()
                 document.getElementsByClass("skip-link screen-reader-text").remove()
+                document.getElementsByClass("elementor-element elementor-element-19762840 elementor-widget elementor-widget-theme-site-logo elementor-widget-image").remove()
                 document.getElementsByClass("elementor elementor-2069 elementor-location-footer").remove()
+                document.getElementsByClass("skip-link screen-reader-text").remove()
+                document.getElementsByClass("elementor elementor-2156 elementor-location-header").remove()
+                document.getElementsByClass("elementor-section elementor-top-section elementor-element elementor-element-2ff5023f elementor-section-height-min-height elementor-section-boxed elementor-section-height-default elementor-section-items-middle").remove()
+                document.getElementsByClass("elementor-section elementor-top-section elementor-element elementor-element-1667493 elementor-section-boxed elementor-section-height-default elementor-section-height-default").remove()
                 document.getElementsByClass("elementor elementor-2156 elementor-location-header").remove()
                 document.getElementsByClass("elementor-button elementor-button-link elementor-size-sm").remove()
+                document.getElementsByClass("elementor elementor-2069 elementor-location-footer").remove()
             } catch (e: IOException) {
                 e.printStackTrace()
             }
