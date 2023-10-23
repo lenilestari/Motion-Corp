@@ -61,6 +61,8 @@ class RadioFragment : Fragment() {
         webSetting.setDomStorageEnabled(true)
         webSetting.allowFileAccess = true
 
+
+
         myWebView.canGoBack()
         myWebView.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_BACK
