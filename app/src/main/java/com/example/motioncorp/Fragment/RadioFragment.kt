@@ -58,6 +58,8 @@ class RadioFragment : Fragment() {
 
         val webSetting: WebSettings = myWebView.settings
         webSetting.javaScriptEnabled = true
+        webSetting.setDomStorageEnabled(true)
+        webSetting.allowFileAccess = true
 
         myWebView.canGoBack()
         myWebView.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
