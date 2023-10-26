@@ -1,5 +1,6 @@
 package com.example.motioncorp.Fragment
 
+import android.content.pm.ActivityInfo
 import android.os.AsyncTask
 import android.os.Bundle
 import android.view.KeyEvent
@@ -8,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -31,10 +33,8 @@ class RadioFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentRadioBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
         return root
     }
 
@@ -56,14 +56,44 @@ class RadioFragment : Fragment() {
             }
         }
 
+        myWebView.webChromeClient = object : WebChromeClient() {
+            override fun onShowCustomView(view: View?, requestedOrientation: Int, callback: CustomViewCallback?) {
+                // Ganti orientasi layar ke landscape
+                activity?.requestedOrientation = requestedOrientation
+                super.onShowCustomView(view, requestedOrientation, callback)
+                // Di sini, tambahkan kode JavaScript untuk mengontrol fullscreen
+                val javascriptCode = """
+                    var iframe = document.getElementById("widget2");
+                    if (iframe && (iframe.requestFullscreen || iframe.mozRequestFullScreen || iframe.webkitRequestFullscreen)) {
+                        if (iframe.requestFullscreen) {
+                            iframe.requestFullscreen();
+                        } else if (iframe.mozRequestFullScreen) {
+                            iframe.mozRequestFullScreen();
+                        } else if (iframe.webkitRequestFullscreen) {
+                            iframe.webkitRequestFullscreen();
+                        }
+                    }
+                """
+                myWebView.evaluateJavascript(javascriptCode, null)
+            }
+
+            override fun onHideCustomView() {
+                // Kembali ke orientasi potret
+                activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                super.onHideCustomView()
+            }
+        }
+
         val webSetting: WebSettings = myWebView.settings
         webSetting.javaScriptEnabled = true
         webSetting.setDomStorageEnabled(true)
         webSetting.allowFileAccess = true
-
-
+        webSetting.allowContentAccess = true
+        webSetting.mediaPlaybackRequiresUserGesture = false
 
         myWebView.canGoBack()
+        myWebView.settings.javaScriptEnabled = true
+
         myWebView.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_BACK
                 && event.action == MotionEvent.ACTION_UP
@@ -95,6 +125,7 @@ class RadioFragment : Fragment() {
                 document.getElementsByClass("elementor elementor-2156 elementor-location-header").remove()
                 document.getElementsByClass("elementor-button elementor-button-link elementor-size-sm").remove()
                 document.getElementsByClass("elementor elementor-2069 elementor-location-footer").remove()
+                document.getElementsByClass("elementor-background-slideshow__slide__image").remove()
             } catch (e: IOException) {
                 e.printStackTrace()
             }
