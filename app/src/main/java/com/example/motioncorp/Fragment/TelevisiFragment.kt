@@ -18,7 +18,6 @@ import org.jsoup.nodes.Document
 import java.io.IOException
 
 class TelevisiFragment : Fragment() {
-
     private var _binding: FragmentTelevisiBinding? = null
     private val binding get() = _binding!!
     private val url1 = "https://tv.motioncorpbymmtc.id/"
@@ -26,9 +25,7 @@ class TelevisiFragment : Fragment() {
     private var currentUrl: String = url1 // Menyimpan URL saat ini
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
 
         _binding = FragmentTelevisiBinding.inflate(inflater, container, false)
@@ -41,8 +38,7 @@ class TelevisiFragment : Fragment() {
         val myWebView: WebView = view.findViewById(R.id.WebView2)
         myWebView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(
-                view: WebView?,
-                url: String?
+                view: WebView?, url: String?
             ): Boolean {
                 if (url == "https://tv.motioncorpbymmtc.id/index.php/motion-tv-live/") {
                     // Klik tombol "Stream Video," akses URL baru (https://tv.motioncorpbymmtc.id/motion-tv-live/)
@@ -64,10 +60,7 @@ class TelevisiFragment : Fragment() {
 
         myWebView.canGoBack()
         myWebView.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
-            if (keyCode == KeyEvent.KEYCODE_BACK
-                && event.action == MotionEvent.ACTION_UP
-                && myWebView.canGoBack()
-            ) {
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.action == MotionEvent.ACTION_UP && myWebView.canGoBack()) {
                 myWebView.goBack()
                 return@OnKeyListener true
             }
@@ -78,17 +71,23 @@ class TelevisiFragment : Fragment() {
         MyAsyncTask(myWebView).execute(url1)
     }
 
-    private inner class MyAsyncTask(private val webView: WebView) : AsyncTask<String, Void, String>() {
+    private inner class MyAsyncTask(private val webView: WebView) :
+        AsyncTask<String, Void, String>() {
         override fun doInBackground(vararg urls: String): String? {
             val url = urls[0]
             var document: Document? = null
             try {
                 document = Jsoup.connect(url).get()
-                document.getElementsByClass("elementor elementor-24 elementor-location-header").remove()
-                document.getElementsByClass("elementor elementor-40 elementor-location-footer").remove()
-                document.getElementsByClass("elementor elementor-132 elementor-location-header").remove()
-                document.getElementsByClass("elementor elementor-40 elementor-location-footer").remove()
-                document.getElementsByClass("elementor-element elementor-element-5338298 elementor-mobile-align-right elementor-widget elementor-widget-button").remove()
+                document.getElementsByClass("elementor elementor-24 elementor-location-header")
+                    .remove()
+                document.getElementsByClass("elementor elementor-40 elementor-location-footer")
+                    .remove()
+                document.getElementsByClass("elementor elementor-132 elementor-location-header")
+                    .remove()
+                document.getElementsByClass("elementor elementor-40 elementor-location-footer")
+                    .remove()
+                document.getElementsByClass("elementor-element elementor-element-5338298 elementor-mobile-align-right elementor-widget elementor-widget-button")
+                    .remove()
             } catch (e: IOException) {
                 e.printStackTrace()
             }

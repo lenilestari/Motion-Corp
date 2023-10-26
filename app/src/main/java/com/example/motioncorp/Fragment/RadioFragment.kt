@@ -20,7 +20,6 @@ import org.jsoup.nodes.Document
 import java.io.IOException
 
 class RadioFragment : Fragment() {
-
     private var _binding: FragmentRadioBinding? = null
     private val binding get() = _binding!!
     private val url1 = "https://radio.motioncorpbymmtc.id/"

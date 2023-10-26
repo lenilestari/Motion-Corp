@@ -51,7 +51,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     implementation 'com.etebarian:meow-bottom-navigation:1.2.0'
-    implementation 'org.jsoup:jsoup:1.10.3'
+    implementation 'org.jsoup:jsoup:1.13.1'
 
     implementation "androidx.webkit:webkit:1.8.0"
 }
