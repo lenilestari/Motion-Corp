@@ -26,6 +26,8 @@ class RadioFragment : Fragment() {
     private val url1 = "https://radio.motioncorpbymmtc.id/"
     private val url2 = "https://radio.motioncorpbymmtc.id/index.php/stream-video/"
     private val url3 = "https://radio.motioncorpbymmtc.id/index.php/stream-audio/"
+    private val url4 = "https://radio.motioncorpbymmtc.id/index.php/damkar/"
+    private val url5 = "https://radio.motioncorpbymmtc.id/index.php/fyi/"
     private var currentUrl: String = url1 // Menyimpan URL saat ini
 
     override fun onCreateView(
@@ -51,6 +53,12 @@ class RadioFragment : Fragment() {
                 } else if (url == "https://radio.motioncorpbymmtc.id/index.php/stream-audio/") {
                     MyAsyncTask(myWebView).execute(url3)
                     return true
+                }
+                else if (url == "https://radio.motioncorpbymmtc.id/index.php/damkar/") {
+                    MyAsyncTask(myWebView).execute(url4)
+                }
+                else if (url == "https://radio.motioncorpbymmtc.id/index.php/fyi/") {
+                    MyAsyncTask(myWebView).execute(url5)
                 }
                 return false
             }
@@ -118,6 +126,7 @@ class RadioFragment : Fragment() {
                 document.getElementsByClass("skip-link screen-reader-text").remove()
                 document.getElementsByClass("elementor-element elementor-element-19762840 elementor-widget elementor-widget-theme-site-logo elementor-widget-image").remove()
                 document.getElementsByClass("elementor elementor-2069 elementor-location-footer").remove()
+                document.getElementsByClass("elementor elementor-2572 elementor-location-header").remove()
                 document.getElementsByClass("skip-link screen-reader-text").remove()
                 document.getElementsByClass("elementor elementor-2156 elementor-location-header").remove()
                 document.getElementsByClass("elementor-section elementor-top-section elementor-element elementor-element-2ff5023f elementor-section-height-min-height elementor-section-boxed elementor-section-height-default elementor-section-items-middle").remove()
@@ -126,6 +135,8 @@ class RadioFragment : Fragment() {
                 document.getElementsByClass("elementor-button elementor-button-link elementor-size-sm").remove()
                 document.getElementsByClass("elementor elementor-2069 elementor-location-footer").remove()
                 document.getElementsByClass("elementor-background-slideshow__slide__image").remove()
+                document.getElementsByClass("elementor-section elementor-top-section elementor-element elementor-element-5051ca45 elementor-section-boxed elementor-section-height-default elementor-section-height-default").remove()
+
             } catch (e: IOException) {
                 e.printStackTrace()
             }

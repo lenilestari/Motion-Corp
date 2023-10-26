@@ -58,6 +58,10 @@ class HomeFragment : Fragment() {
 
         val webSetting: WebSettings = myWebView.settings
         webSetting.javaScriptEnabled = true
+        webSetting.setDomStorageEnabled(true)
+        webSetting.allowFileAccess = true
+        webSetting.allowContentAccess = true
+        webSetting.mediaPlaybackRequiresUserGesture = false
 
         myWebView.canGoBack()
         myWebView.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
