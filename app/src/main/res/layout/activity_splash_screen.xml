@@ -4,9 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg1"
+    android:background="@drawable/bg2"
+    android:orientation="vertical"
     tools:context=".SplashScreen">
 
+
+    <ImageView
+        android:layout_marginTop="150dp"
+        android:id="@+id/image_1"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        android:src="@drawable/logo2" />
+    <ProgressBar
+        android:id="@+id/Progress_bar"
+        android:layout_marginTop="50dp"
+        android:layout_below="@id/image_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:indeterminate="true"
+        android:layout_marginStart="100dp"
+        android:layout_marginEnd="100dp"
+        android:indeterminateTint="@color/MotionCP"/>
 
 
 </LinearLayout>

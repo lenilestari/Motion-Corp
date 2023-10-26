@@ -1,8 +1,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.MotionCorp" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">#1d434f</item>
+
+    </style>
+
+
+    <style name="CustomProgressBarStyle" parent="android:Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progress_bar</item>
     </style>
 
     <style name="Theme.MotionCorp" parent="Base.Theme.MotionCorp" />
