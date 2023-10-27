@@ -7,9 +7,13 @@ android {
     namespace 'com.example.motioncorp'
     compileSdk 33
 
+    viewBinding {
+        enabled = true
+    }
+
     defaultConfig {
         applicationId "com.example.motioncorp"
-        minSdk 26
+        minSdk 23
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -31,13 +35,6 @@ android {
         jvmTarget = '1.8'
     }
 
-    viewBinding {
-        enabled = true
-    }
-
-    buildFeatures {
-        dataBinding true
-    }
 }
 
 dependencies {
@@ -52,6 +49,4 @@ dependencies {
 
     implementation 'com.etebarian:meow-bottom-navigation:1.2.0'
     implementation 'org.jsoup:jsoup:1.13.1'
-
-//    implementation 'androidx.webkit:webkit:1.6.0'
 }

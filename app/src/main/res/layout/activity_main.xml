@@ -5,13 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bgAtas"
-    tools:context="MainActivity">
-    <!--    <include-->
-    <!--        android:id="@+id/customToolbar"-->
-    <!--        layout="@layout/custom_toolbar"-->
-    <!--        app:layout_constraintTop_toTopOf="parent"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"/>-->
+    tools:context=".MainActivity">
 
     <FrameLayout
         android:id="@+id/frame"
@@ -34,7 +28,5 @@
         app:mbn_defaultIconColor="@color/white"
         app:mbn_selectedIconColor="@color/white"
         app:mbn_shadowColor="@color/MotionCP" />
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

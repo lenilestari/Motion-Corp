@@ -12,7 +12,7 @@ class Continue3 : AppCompatActivity() {
 
         val continue3 = findViewById<TextView>(R.id.T_Next3)
         continue3.setOnClickListener {
-            val intentContinue3 = Intent (this, Continue4::class.java)
+            val intentContinue3 = Intent(this, Continue4::class.java)
             startActivity(intentContinue3)
         }
     }
