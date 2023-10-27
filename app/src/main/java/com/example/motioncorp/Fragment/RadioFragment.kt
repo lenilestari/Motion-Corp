@@ -143,6 +143,8 @@ class RadioFragment : Fragment() {
                 document.getElementsByClass("elementor elementor-2069 elementor-location-footer").remove()
                 document.getElementsByClass("elementor-background-slideshow__slide__image").remove()
                 document.getElementsByClass("elementor-section elementor-top-section elementor-element elementor-element-5051ca45 elementor-section-boxed elementor-section-height-default elementor-section-height-default").remove()
+                document.getElementsByClass("elementor-menu-toggle__icon--open eicon-menu-bar").remove()
+                document.getElementsByClass("attachment-full size-full wp-image-2474").remove()
 
             } catch (e: IOException) {
                 e.printStackTrace()

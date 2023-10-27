@@ -11,6 +11,8 @@ import android.view.ViewGroup
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.ProgressBar
+import android.widget.TextView
 import com.example.motioncorp.R
 import com.example.motioncorp.databinding.FragmentHomeBinding
 import org.jsoup.Jsoup
@@ -20,6 +22,10 @@ import java.io.IOException
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
+
+    private lateinit var progressBar: ProgressBar
+    private lateinit var loadingMessage: TextView
+
     private val binding get() = _binding!!
     private val url1 = "https://motioncorpbymmtc.id/"
     private val url2 = "https://tv.motioncorpbymmtc.id/"
@@ -31,9 +37,12 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        progressBar = root.findViewById(R.id.Progressbar_Home)
+        loadingMessage = root.findViewById(R.id.loadingMessage)
+        loadingMessage.text = "Tunggu sebentar..."
 
         return root
     }
@@ -80,6 +89,12 @@ class HomeFragment : Fragment() {
     }
 
     private inner class MyAsyncTask(private val webView: WebView) : AsyncTask<String, Void, String>() {
+        override fun onPreExecute() {
+            super.onPreExecute()
+            progressBar.visibility = View.VISIBLE
+            loadingMessage.text = "Tunggu sebentar..."
+        }
+
         override fun doInBackground(vararg urls: String): String? {
             val url = urls[0]
             var document: Document? = null
@@ -105,6 +120,8 @@ class HomeFragment : Fragment() {
                 webView.loadDataWithBaseURL(currentUrl, modifiedHtml, "text/html", "utf-8", "")
                 webView.settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
             }
+            progressBar.visibility = View.GONE
+            loadingMessage.text = ""
         }
     }
 
