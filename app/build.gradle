@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace 'com.example.motioncorp'
-    compileSdk 34
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.motioncorp"
         minSdk 26
-        targetSdk 34
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -53,5 +53,5 @@ dependencies {
     implementation 'com.etebarian:meow-bottom-navigation:1.2.0'
     implementation 'org.jsoup:jsoup:1.13.1'
 
-    implementation "androidx.webkit:webkit:1.8.0"
+//    implementation 'androidx.webkit:webkit:1.6.0'
 }

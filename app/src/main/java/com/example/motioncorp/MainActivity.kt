@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
 
         // Inisialisasi UI komponen
-//        val customToolbar = binding.customToolbar
         bottomNavigation = findViewById(R.id.bottomNavigation)
 
         // Inisialisasi bottomNavigation

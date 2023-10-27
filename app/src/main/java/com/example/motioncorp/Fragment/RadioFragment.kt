@@ -69,7 +69,12 @@ class RadioFragment : Fragment() {
                 activity?.requestedOrientation = requestedOrientation
                 super.onShowCustomView(view, requestedOrientation, callback)
                 // Di sini, tambahkan kode JavaScript untuk mengontrol fullscreen
+                activity?.requestedOrientation = requestedOrientation
+                binding.WebView3.visibility = View.GONE
+                binding.customView3.visibility = View.VISIBLE
+                binding.customView3.addView(view)
                 val javascriptCode = """
+             
                     var iframe = document.getElementById("widget2");
                     if (iframe && (iframe.requestFullscreen || iframe.mozRequestFullScreen || iframe.webkitRequestFullscreen)) {
                         if (iframe.requestFullscreen) {
@@ -88,6 +93,9 @@ class RadioFragment : Fragment() {
                 // Kembali ke orientasi potret
                 activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                 super.onHideCustomView()
+
+                binding.WebView3.visibility = View.VISIBLE
+                binding.customView3.visibility = View.GONE
             }
         }
 
