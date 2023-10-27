@@ -39,31 +39,6 @@ class MainActivity : AppCompatActivity() {
 //        new line ini
         initializeFragmentMeow()
 
-//        val fragmentManager = supportFragmentManager
-
-//        // Inisialisasi fungsi untuk tombol kembali
-//        customToolbar.Back.setOnClickListener {
-//            val fragmentCount = fragmentManager.backStackEntryCount
-//            if (fragmentCount > 0) {
-//                // Jika ada fragment di tumpukan, tampilkan fragment sebelumnya
-//                fragmentManager.popBackStack()
-//                val fragmentTag = fragmentManager.getBackStackEntryAt(fragmentCount - 1).name
-//                // Mengatur bottom navigation sesuai dengan fragment saat ini
-//                setBottomNavigationItem(fragmentTag)
-//                currentFragment = fragmentManager.findFragmentByTag(fragmentTag)
-//
-//            } else {
-//                super.onBackPressed()
-//            }
-//        }
-
-
-        // Periksa apakah ada fragment saat ini
-//        if (currentFragment == null) {
-//            // Jika tidak ada fragment yang ditampilkan, tampilkan HomeFragment
-//            replace(HomeFragment())
-//            setBottomNavigationItem(HomeFragment::class.java.simpleName)
-//        }
     }
 
     private fun initializeFragmentMeow() {
@@ -155,25 +130,6 @@ class MainActivity : AppCompatActivity() {
         currentFragment = fragment
     }
 
-//    override fun onBackPressed() {
-//        val fragmentManager = supportFragmentManager
-//        val fragmentCount = fragmentManager.backStackEntryCount
-//        if (fragmentCount > 0) {
-//            // Jika ada fragment di tumpukan, tampilkan fragment sebelumnya
-//            fragmentManager.popBackStack()
-//            val fragmentTag = fragmentManager.getBackStackEntryAt(fragmentCount - 1).name
-//            setBottomNavigationItem(fragmentTag)
-//            currentFragment = fragmentManager.findFragmentByTag(fragmentTag)
-//        } else {
-//            if (currentFragment !is HomeFragment) {
-//                // Jika tidak ada fragment di tumpukan, dan fragment saat ini bukan HomeFragment, tampilkan HomeFragment
-//                replace(HomeFragment())
-//                setBottomNavigationItem(HomeFragment::class.java.simpleName)
-//            } else {
-//                super.onBackPressed()
-//            }
-//        }
-//    }
 
 
 }

@@ -3,6 +3,7 @@ package com.example.motioncorp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 
 class Continue4 : AppCompatActivity() {
@@ -14,6 +15,7 @@ class Continue4 : AppCompatActivity() {
         continue4.setOnClickListener {
             val intentContinue4 = Intent(this, MainActivity::class.java)
             startActivity(intentContinue4)
+            Log.d("Continue4", "IntentContinue4 started")
             finish()
 
         }
