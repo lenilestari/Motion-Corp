@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
             currentFragment = fragmentManager.findFragmentByTag(fragmentTag)
 
         } else {
-            super.onBackPressed()
+//            super.onBackPressed()
         }
 
         if (currentFragment == null) {

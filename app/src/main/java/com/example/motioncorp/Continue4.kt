@@ -22,8 +22,8 @@ class Continue4 : AppCompatActivity() {
         }
 
         val continue4Image = findViewById<ImageView>(R.id.Image_4)
-        continue4Image.setOnClickListener{
-            val intentContinue4Image = Intent (this, MainActivity::class.java)
+        continue4Image.setOnClickListener {
+            val intentContinue4Image = Intent(this, MainActivity::class.java)
             startActivity(intentContinue4Image)
         }
     }

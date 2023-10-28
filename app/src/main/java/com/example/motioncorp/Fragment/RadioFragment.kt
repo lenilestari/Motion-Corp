@@ -1,5 +1,7 @@
 package com.example.motioncorp.Fragment
 
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.AsyncTask
 import android.os.Bundle
@@ -14,6 +16,7 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.example.motioncorp.R
+import com.example.motioncorp.StreamVideoActivity
 import com.example.motioncorp.databinding.FragmentRadioBinding
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -48,31 +51,35 @@ class RadioFragment : Fragment() {
             ): Boolean {
                 if (url == "https://radio.motioncorpbymmtc.id/index.php/stream-video/") {
                     MyAsyncTask(myWebView).execute(url2)
-                    return true
+                    val intent = Intent(view?.context, StreamVideoActivity::class.java)
+                    startActivity(intent)
                 } else if (url == "https://radio.motioncorpbymmtc.id/index.php/stream-audio/") {
                     MyAsyncTask(myWebView).execute(url3)
                     return true
-                }
-                else if (url == "https://radio.motioncorpbymmtc.id/index.php/damkar/") {
+                } else if (url == "https://radio.motioncorpbymmtc.id/index.php/damkar/") {
                     MyAsyncTask(myWebView).execute(url4)
-                }
-                else if (url == "https://radio.motioncorpbymmtc.id/index.php/fyi/") {
+                } else if (url == "https://radio.motioncorpbymmtc.id/index.php/fyi/") {
                     MyAsyncTask(myWebView).execute(url5)
                 }
                 return false
             }
         }
 
+
         myWebView.webChromeClient = object : WebChromeClient() {
-            override fun onShowCustomView(view: View?, requestedOrientation: Int, callback: CustomViewCallback?) {
+            override fun onShowCustomView(
+                view: View?,
+                requestedOrientation: Int,
+                callback: CustomViewCallback?
+            ) {
                 // Ganti orientasi layar ke landscape
                 activity?.requestedOrientation = requestedOrientation
                 super.onShowCustomView(view, requestedOrientation, callback)
                 // Di sini, tambahkan kode JavaScript untuk mengontrol fullscreen
                 activity?.requestedOrientation = requestedOrientation
                 binding.WebView3.visibility = View.GONE
-                binding.customView3.visibility = View.VISIBLE
-                binding.customView3.addView(view)
+//                binding.customView3.visibility = View.VISIBLE
+//                binding.customView3.addView(view)
                 val javascriptCode = """
              
                     var iframe = document.getElementById("widget2");
@@ -95,7 +102,7 @@ class RadioFragment : Fragment() {
                 super.onHideCustomView()
 
                 binding.WebView3.visibility = View.VISIBLE
-                binding.customView3.visibility = View.GONE
+//                binding.customView3.visibility = View.GONE
             }
         }
 
@@ -124,26 +131,38 @@ class RadioFragment : Fragment() {
         MyAsyncTask(myWebView).execute(url1)
     }
 
-    private inner class MyAsyncTask(private val webView: WebView) : AsyncTask<String, Void, String>() {
+    private inner class MyAsyncTask(private val webView: WebView) :
+        AsyncTask<String, Void, String>() {
         override fun doInBackground(vararg urls: String): String? {
             val url = urls[0]
             var document: Document? = null
             try {
                 document = Jsoup.connect(url).get()
                 document.getElementsByClass("skip-link screen-reader-text").remove()
-                document.getElementsByClass("elementor-element elementor-element-19762840 elementor-widget elementor-widget-theme-site-logo elementor-widget-image").remove()
-                document.getElementsByClass("elementor elementor-2069 elementor-location-footer").remove()
-                document.getElementsByClass("elementor elementor-2572 elementor-location-header").remove()
+                document.getElementsByClass("elementor-element elementor-element-19762840 elementor-widget elementor-widget-theme-site-logo elementor-widget-image")
+                    .remove()
+                document.getElementsByClass("elementor elementor-2069 elementor-location-footer")
+                    .remove()
+                document.getElementsByClass("elementor elementor-2572 elementor-location-header")
+                    .remove()
                 document.getElementsByClass("skip-link screen-reader-text").remove()
-                document.getElementsByClass("elementor elementor-2156 elementor-location-header").remove()
-                document.getElementsByClass("elementor-section elementor-top-section elementor-element elementor-element-2ff5023f elementor-section-height-min-height elementor-section-boxed elementor-section-height-default elementor-section-items-middle").remove()
-                document.getElementsByClass("elementor-section elementor-top-section elementor-element elementor-element-1667493 elementor-section-boxed elementor-section-height-default elementor-section-height-default").remove()
-                document.getElementsByClass("elementor elementor-2156 elementor-location-header").remove()
-                document.getElementsByClass("elementor-button elementor-button-link elementor-size-sm").remove()
-                document.getElementsByClass("elementor elementor-2069 elementor-location-footer").remove()
+                document.getElementsByClass("elementor elementor-2156 elementor-location-header")
+                    .remove()
+                document.getElementsByClass("elementor-section elementor-top-section elementor-element elementor-element-2ff5023f elementor-section-height-min-height elementor-section-boxed elementor-section-height-default elementor-section-items-middle")
+                    .remove()
+                document.getElementsByClass("elementor-section elementor-top-section elementor-element elementor-element-1667493 elementor-section-boxed elementor-section-height-default elementor-section-height-default")
+                    .remove()
+                document.getElementsByClass("elementor elementor-2156 elementor-location-header")
+                    .remove()
+                document.getElementsByClass("elementor-button elementor-button-link elementor-size-sm")
+                    .remove()
+                document.getElementsByClass("elementor elementor-2069 elementor-location-footer")
+                    .remove()
                 document.getElementsByClass("elementor-background-slideshow__slide__image").remove()
-                document.getElementsByClass("elementor-section elementor-top-section elementor-element elementor-element-5051ca45 elementor-section-boxed elementor-section-height-default elementor-section-height-default").remove()
-                document.getElementsByClass("elementor-menu-toggle__icon--open eicon-menu-bar").remove()
+                document.getElementsByClass("elementor-section elementor-top-section elementor-element elementor-element-5051ca45 elementor-section-boxed elementor-section-height-default elementor-section-height-default")
+                    .remove()
+                document.getElementsByClass("elementor-menu-toggle__icon--open eicon-menu-bar")
+                    .remove()
                 document.getElementsByClass("attachment-full size-full wp-image-2474").remove()
 
             } catch (e: IOException) {
