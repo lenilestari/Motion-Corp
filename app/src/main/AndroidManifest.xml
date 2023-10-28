@@ -36,6 +36,8 @@
             android:name=".SplashScreen"
             android:theme="@style/Theme.MotionCorp"
             android:exported="false">
+
+
         </activity>
         <activity
             android:name=".MainActivity"
@@ -48,6 +50,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
     </application>
 
