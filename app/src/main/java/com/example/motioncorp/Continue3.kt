@@ -3,6 +3,7 @@ package com.example.motioncorp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.TextView
 
 class Continue3 : AppCompatActivity() {
@@ -15,5 +16,12 @@ class Continue3 : AppCompatActivity() {
             val intentContinue3 = Intent(this, Continue4::class.java)
             startActivity(intentContinue3)
         }
+
+        val continue3Image = findViewById<ImageView>(R.id.Image_3)
+        continue3Image.setOnClickListener {
+            val intentContinue3Image = Intent (this, Continue4::class.java)
+            startActivity(intentContinue3Image)
+        }
+
     }
 }

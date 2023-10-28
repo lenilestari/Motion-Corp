@@ -96,6 +96,7 @@
                 android:textSize="16sp" />
 
             <ImageView
+                android:id="@+id/Image_1"
                 android:layout_width="30dp"
                 android:layout_height="15dp"
                 android:layout_marginTop="2dp"
