@@ -17,7 +17,7 @@ class Continue4 : AppCompatActivity() {
             val intentContinue4 = Intent(this, MainActivity::class.java)
             startActivity(intentContinue4)
             Log.d("Continue4", "IntentContinue4 started")
-//            finish()
+            finish()
 
         }
 

@@ -3,6 +3,8 @@ package com.example.motioncorp.Fragment
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
@@ -16,6 +18,7 @@ import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.example.motioncorp.R
@@ -27,17 +30,19 @@ import java.io.IOException
 
 class RadioFragment : Fragment() {
     private var _binding: FragmentRadioBinding? = null
-
     private lateinit var progressBar: ProgressBar
     private lateinit var loadingMessage: TextView
-
     private val binding get() = _binding!!
+
+
     private val url1 = "https://radio.motioncorpbymmtc.id/"
     private val url2 = "https://radio.motioncorpbymmtc.id/index.php/stream-video/"
     private val url3 = "https://radio.motioncorpbymmtc.id/index.php/stream-audio/"
     private val url4 = "https://radio.motioncorpbymmtc.id/index.php/damkar/"
     private val url5 = "https://radio.motioncorpbymmtc.id/index.php/fyi/"
     private var currentUrl: String = url1 // Menyimpan URL saat ini
+
+    private var fullScreenUrl: String? = url2 // Simpan URL yang akan digunakan saat tombol full screen diklik
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -76,53 +81,6 @@ class RadioFragment : Fragment() {
             }
         }
 
-        myWebView.webChromeClient = object : WebChromeClient() {
-            override fun onShowCustomView(
-                view: View?,
-                requestedOrientation: Int,
-                callback: CustomViewCallback?
-            ) {
-                // Ganti orientasi layar ke landscape
-                activity?.requestedOrientation = requestedOrientation
-                super.onShowCustomView(view, requestedOrientation, callback)
-                // Di sini, tambahkan kode JavaScript untuk mengontrol fullscreen
-                activity?.requestedOrientation = requestedOrientation
-                binding.WebView3.visibility = View.GONE
-
-                val javascriptCode = """
-                    var iframe = document.querySelector('minnit-chat iframe');
-                    if (iframe) {
-                        // Akses elemen dalam iframe
-                        var chatInput = iframe.contentDocument.querySelector('#chatInputField');
-                        var sendButton = iframe.contentDocument.querySelector('#chatSendButton');
-                        
-                        // Periksa jika elemen ditemukan
-                        if (chatInput && sendButton) {
-                            // Atur nilai input pesan
-                            chatInput.value = 'Pesan Anda';
-                            
-                            // Klik tombol kirim pesan
-                            sendButton.click();
-                        }
-                    }
-                """
-                myWebView.evaluateJavascript(javascriptCode, null)
-                Log.d("MyApp", "JavaScript code: $javascriptCode")
-                myWebView.evaluateJavascript(javascriptCode, null)
-                Log.d("MyApp", "URL: $currentUrl")
-
-
-            }
-
-            override fun onHideCustomView() {
-                // Kembali ke orientasi potret
-                activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                super.onHideCustomView()
-
-                binding.WebView3.visibility = View.VISIBLE
-            }
-        }
-
         val webSetting: WebSettings = myWebView.settings
         webSetting.javaScriptEnabled = true
         webSetting.setDomStorageEnabled(true)
@@ -130,7 +88,6 @@ class RadioFragment : Fragment() {
         webSetting.allowContentAccess = true
         webSetting.mediaPlaybackRequiresUserGesture = false
 
-        myWebView.canGoBack()
         myWebView.settings.javaScriptEnabled = true
 
         myWebView.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
@@ -143,6 +100,58 @@ class RadioFragment : Fragment() {
             }
             false
         })
+
+        // Menangani klik tombol full screen YouTube
+        myWebView.webChromeClient = object : WebChromeClient() {
+            var originalOrientation = 0
+            var originalSystemUiVisibility = 0
+            var customView: View? = null
+            var customViewCallback: WebChromeClient.CustomViewCallback? = null
+
+            override fun getDefaultVideoPoster(): Bitmap? {
+                return if (customView == null) {
+                    null
+                } else {
+                    BitmapFactory.decodeResource(resources, 2130837573)
+                }
+            }
+
+            override fun onHideCustomView() {
+                if (customView != null) {
+                    (requireActivity().window.decorView as FrameLayout).removeView(customView)
+                    customView = null
+                    requireActivity().window.decorView.systemUiVisibility = originalSystemUiVisibility
+                    requireActivity().requestedOrientation = originalOrientation
+                    customViewCallback?.onCustomViewHidden()
+                    customViewCallback = null
+
+                    if (fullScreenUrl != null) {
+                        // Kembali ke URL full screen setelah keluar dari mode layar penuh
+                        MyAsyncTask(myWebView).execute(fullScreenUrl)
+                        fullScreenUrl = null
+                    }
+                }
+            }
+
+            override fun onShowCustomView(paramView: View, paramCustomViewCallback: WebChromeClient.CustomViewCallback) {
+                if (customView != null) {
+                    onHideCustomView()
+                    return
+                }
+
+                customView = paramView
+                originalSystemUiVisibility = requireActivity().window.decorView.systemUiVisibility
+                originalOrientation = requireActivity().requestedOrientation
+                customViewCallback = paramCustomViewCallback
+
+                (requireActivity().window.decorView as FrameLayout).addView(customView,
+                    ViewGroup.LayoutParams(-1, -1)
+                )
+                requireActivity().window.decorView.systemUiVisibility = 3846 or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+
+                fullScreenUrl = myWebView.url
+            }
+        }
 
         // Menggunakan AsyncTask untuk mengambil dan memproses HTML
         MyAsyncTask(myWebView).execute(url1)
@@ -182,7 +191,7 @@ class RadioFragment : Fragment() {
                     .remove()
                 document.getElementsByClass("elementor elementor-2069 elementor-location-footer")
                     .remove()
-                document.getElementsByClass("elementor-background-slideshow__slide__image").remove()
+                document.getElementsByClass("elementor-background-slideshow_slide_image").remove()
                 document.getElementsByClass("elementor-section elementor-top-section elementor-element elementor-element-5051ca45 elementor-section-boxed elementor-section-height-default elementor-section-height-default")
                     .remove()
                 document.getElementsByClass("elementor-menu-toggle__icon--open eicon-menu-bar")
@@ -205,6 +214,19 @@ class RadioFragment : Fragment() {
 
             progressBar.visibility = View.GONE
             loadingMessage.text = ""
+
+            // Tambahkan kode JavaScript setelah menampilkan halaman web
+            val javascriptCode = """
+        var iframes = document.getElementsByTagName('iframe');
+        for (var i = 0; i < iframes.length; i++) {
+            var iframe = iframes[i];
+            iframe.setAttribute('allowfullscreen', 'true');
+        }
+    """
+
+            webView.post {
+                webView.evaluateJavascript(javascriptCode, null)
+            }
         }
     }
 
