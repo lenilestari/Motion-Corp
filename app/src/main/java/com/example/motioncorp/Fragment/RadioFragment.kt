@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.AsyncTask
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -15,6 +16,8 @@ import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.ProgressBar
+import android.widget.TextView
 import com.example.motioncorp.R
 import com.example.motioncorp.StreamVideoActivity
 import com.example.motioncorp.databinding.FragmentRadioBinding
@@ -24,6 +27,10 @@ import java.io.IOException
 
 class RadioFragment : Fragment() {
     private var _binding: FragmentRadioBinding? = null
+
+    private lateinit var progressBar: ProgressBar
+    private lateinit var loadingMessage: TextView
+
     private val binding get() = _binding!!
     private val url1 = "https://radio.motioncorpbymmtc.id/"
     private val url2 = "https://radio.motioncorpbymmtc.id/index.php/stream-video/"
@@ -39,6 +46,11 @@ class RadioFragment : Fragment() {
     ): View {
         _binding = FragmentRadioBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        progressBar = root.findViewById(R.id.Progressbar_Home)
+        loadingMessage = root.findViewById(R.id.loadingMessage)
+        loadingMessage.text = "Tunggu sebentar..."
+
         return root
     }
 
@@ -51,8 +63,7 @@ class RadioFragment : Fragment() {
             ): Boolean {
                 if (url == "https://radio.motioncorpbymmtc.id/index.php/stream-video/") {
                     MyAsyncTask(myWebView).execute(url2)
-                    val intent = Intent(view?.context, StreamVideoActivity::class.java)
-                    startActivity(intent)
+                    return true
                 } else if (url == "https://radio.motioncorpbymmtc.id/index.php/stream-audio/") {
                     MyAsyncTask(myWebView).execute(url3)
                     return true
@@ -64,7 +75,6 @@ class RadioFragment : Fragment() {
                 return false
             }
         }
-
 
         myWebView.webChromeClient = object : WebChromeClient() {
             override fun onShowCustomView(
@@ -78,22 +88,30 @@ class RadioFragment : Fragment() {
                 // Di sini, tambahkan kode JavaScript untuk mengontrol fullscreen
                 activity?.requestedOrientation = requestedOrientation
                 binding.WebView3.visibility = View.GONE
-//                binding.customView3.visibility = View.VISIBLE
-//                binding.customView3.addView(view)
+
                 val javascriptCode = """
-             
-                    var iframe = document.getElementById("widget2");
-                    if (iframe && (iframe.requestFullscreen || iframe.mozRequestFullScreen || iframe.webkitRequestFullscreen)) {
-                        if (iframe.requestFullscreen) {
-                            iframe.requestFullscreen();
-                        } else if (iframe.mozRequestFullScreen) {
-                            iframe.mozRequestFullScreen();
-                        } else if (iframe.webkitRequestFullscreen) {
-                            iframe.webkitRequestFullscreen();
+                    var iframe = document.querySelector('minnit-chat iframe');
+                    if (iframe) {
+                        // Akses elemen dalam iframe
+                        var chatInput = iframe.contentDocument.querySelector('#chatInputField');
+                        var sendButton = iframe.contentDocument.querySelector('#chatSendButton');
+                        
+                        // Periksa jika elemen ditemukan
+                        if (chatInput && sendButton) {
+                            // Atur nilai input pesan
+                            chatInput.value = 'Pesan Anda';
+                            
+                            // Klik tombol kirim pesan
+                            sendButton.click();
                         }
                     }
                 """
                 myWebView.evaluateJavascript(javascriptCode, null)
+                Log.d("MyApp", "JavaScript code: $javascriptCode")
+                myWebView.evaluateJavascript(javascriptCode, null)
+                Log.d("MyApp", "URL: $currentUrl")
+
+
             }
 
             override fun onHideCustomView() {
@@ -102,7 +120,6 @@ class RadioFragment : Fragment() {
                 super.onHideCustomView()
 
                 binding.WebView3.visibility = View.VISIBLE
-//                binding.customView3.visibility = View.GONE
             }
         }
 
@@ -133,6 +150,13 @@ class RadioFragment : Fragment() {
 
     private inner class MyAsyncTask(private val webView: WebView) :
         AsyncTask<String, Void, String>() {
+
+        override fun onPreExecute() {
+            super.onPreExecute()
+            progressBar.visibility = View.VISIBLE
+            loadingMessage.text = "Tunggu sebentar..."
+        }
+
         override fun doInBackground(vararg urls: String): String? {
             val url = urls[0]
             var document: Document? = null
@@ -178,6 +202,9 @@ class RadioFragment : Fragment() {
                 webView.loadDataWithBaseURL(currentUrl, modifiedHtml, "text/html", "utf-8", "")
                 webView.settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
             }
+
+            progressBar.visibility = View.GONE
+            loadingMessage.text = ""
         }
     }
 

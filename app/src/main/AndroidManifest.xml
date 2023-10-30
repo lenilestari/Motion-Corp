@@ -37,18 +37,22 @@
             android:theme="@style/Theme.MotionCorp" />
         <activity
             android:name=".SplashScreen"
-            android:exported="false"
-            android:theme="@style/Theme.MotionCorp"></activity>
-        <activity
-            android:name=".MainActivity"
-            android:configChanges="orientation|screenSize"
             android:exported="true"
             android:theme="@style/Theme.MotionCorp">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="false"
+            android:theme="@style/Theme.MotionCorp">
+
         </activity>
     </application>
 
