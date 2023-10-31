@@ -25,14 +25,13 @@ import org.jsoup.nodes.Document
 import java.io.IOException
 
 class TelevisiFragment : Fragment() {
-    // Variabel-variabel yang diperlukan
     private var _binding: FragmentTelevisiBinding? = null
     private val binding get() = _binding!!
     private lateinit var progressBar: ProgressBar
     private lateinit var loadingMessage: TextView
 
     private val url1 = "https://tv.motioncorpbymmtc.id/"
-    private val url2 = "https://tv.motioncorpbymmtc.id/motion-tv-live/"
+    private val url2 = "https://tv.motioncorpbymmtc.id/motion-tv-live"
     private var currentUrl: String = url1
 
     private var fullScreenUrl: String? = null
@@ -62,6 +61,7 @@ class TelevisiFragment : Fragment() {
         webSetting.allowContentAccess = true
         webSetting.mediaPlaybackRequiresUserGesture = false
 
+        myWebView.canGoBack()
         myWebView.settings.javaScriptEnabled = true
 
         myWebView.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
@@ -80,11 +80,11 @@ class TelevisiFragment : Fragment() {
                 view: WebView?,
                 url: String?
             ): Boolean {
-                isExitingFullScreen = url == currentUrl
-                when (url) {
-                    url2 -> MyAsyncTask(myWebView).execute(url2)
+                if (url == url2) {
+                    MyAsyncTask(myWebView).execute(url2)
+                    return true
                 }
-                return true
+                return false
             }
         }
 

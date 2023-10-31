@@ -1,0 +1,51 @@
+[33mcommit b8ba935a00f5026b09caa2b34f5fbbcb863255f5[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: mahbubi69 <muhammadmahbubi495@gmail.com>
+Date:   Sun Oct 15 20:52:06 2023 +0700
+
+    perubahan pada header android
+
+[33mcommit 01536746e1aabce44c360717dfd8a961cde8a706[m
+Author: lenilestari <lenilestari>
+Date:   Sun Oct 15 20:41:20 2023 +0700
+
+    Perbaikan belum kelar bagian header
+
+[33mcommit 44c86769435238c113e23eb5392e6c2fb04ff335[m
+Author: lenilestari <lenilestari>
+Date:   Sat Oct 14 21:06:56 2023 +0700
+
+    Home, Televisi, Radio, News, Info (untuk keseluruhan pemanggilan webview)
+
+[33mcommit f7562f44ac0af9e119063ad4c4adf5423cb28bc6[m
+Merge: c3a380b a264918
+Author: lenilestari <lenilestari>
+Date:   Sat Oct 14 12:23:09 2023 +0700
+
+    Merge branch 'main' of https://github.com/lenilestari/Motion-Corp
+    
+     Conflicts:
+    	app/src/main/java/com/example/motioncorp/MainActivity.kt
+
+[33mcommit c3a380bb84ce7392025f9815bfb56aba4e86e229[m
+Author: lenilestari <lenilestari>
+Date:   Sat Oct 14 12:20:08 2023 +0700
+
+    Motion-Corp
+
+[33mcommit d8c8cf4e88326b0e7b54e6d7746bf3d6f31aa3b8[m
+Author: lenilestari <lenilestari>
+Date:   Sat Oct 14 12:07:58 2023 +0700
+
+    WebView dan pengaturan navigasi webview
+
+[33mcommit a264918208fc692879249f849b365f3a588b7fde[m
+Author: mahbubi69 <muhammadmahbubi495@gmail.com>
+Date:   Fri Oct 13 10:52:02 2023 +0700
+
+    on backrpres
+
+[33mcommit 2018d4c474d43876fd052804a682f40518619656[m
+Author: lenilestari <lenilestari>
+Date:   Wed Oct 11 23:22:21 2023 +0700
+
+    Motion Corp by MMTC

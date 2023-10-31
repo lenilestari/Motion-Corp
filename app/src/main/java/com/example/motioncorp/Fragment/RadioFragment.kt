@@ -73,18 +73,22 @@ class RadioFragment : Fragment() {
                 view: WebView?,
                 url: String?
             ): Boolean {
-                isExitingFullScreen = url == currentUrl
-                when (url) {
-                    url2 -> MyAsyncTask(myWebView).execute(url2)
-                    url3 -> MyAsyncTask(myWebView).execute(url3)
-                    url4 -> MyAsyncTask(myWebView).execute(url4)
-                    url5 -> MyAsyncTask(myWebView).execute(url5)
-                    url6 -> MyAsyncTask(myWebView).execute(url6)
-                    url7 -> MyAsyncTask(myWebView).execute(url7)
+                if (url != null) {
+                    isExitingFullScreen = url == currentUrl
+                    when (url) {
+                        url2 -> MyAsyncTask(myWebView).execute(url2)
+                        url3 -> MyAsyncTask(myWebView).execute(url3)
+                        url4 -> MyAsyncTask(myWebView).execute(url4)
+                        url5 -> MyAsyncTask(myWebView).execute(url5)
+                        url6 -> MyAsyncTask(myWebView).execute(url6)
+                        url7 -> MyAsyncTask(myWebView).execute(url7)
+                    }
+                    return true
                 }
-                return true
+                return false
             }
-        }
+
+    }
 
         myWebView.webChromeClient = object : WebChromeClient() {
             var originalOrientation = 0
