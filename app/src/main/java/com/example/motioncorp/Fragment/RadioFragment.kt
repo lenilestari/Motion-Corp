@@ -1,28 +1,14 @@
 package com.example.motioncorp.Fragment
 
-import android.app.Activity
-import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.os.Bundle
-import android.util.Log
-import android.view.KeyEvent
+import android.view.*
+import android.webkit.*
+import android.widget.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
-import android.webkit.WebChromeClient
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.webkit.WebViewClient
-import android.widget.FrameLayout
-import android.widget.ProgressBar
-import android.widget.TextView
 import com.example.motioncorp.R
-import com.example.motioncorp.StreamVideoActivity
 import com.example.motioncorp.databinding.FragmentRadioBinding
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -30,19 +16,18 @@ import java.io.IOException
 
 class RadioFragment : Fragment() {
     private var _binding: FragmentRadioBinding? = null
+    private val binding get() = _binding!!
     private lateinit var progressBar: ProgressBar
     private lateinit var loadingMessage: TextView
-    private val binding get() = _binding!!
-
 
     private val url1 = "https://radio.motioncorpbymmtc.id/"
     private val url2 = "https://radio.motioncorpbymmtc.id/index.php/stream-video/"
     private val url3 = "https://radio.motioncorpbymmtc.id/index.php/stream-audio/"
     private val url4 = "https://radio.motioncorpbymmtc.id/index.php/damkar/"
     private val url5 = "https://radio.motioncorpbymmtc.id/index.php/fyi/"
-    private var currentUrl: String = url1 // Menyimpan URL saat ini
-
-    private var fullScreenUrl: String? = url2 // Simpan URL yang akan digunakan saat tombol full screen diklik
+    private var currentUrl: String = url1
+    private var fullScreenUrl: String? = null // Tidak perlu diinisialisasi dengan url2
+    private var isExitingFullScreen = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,26 +46,6 @@ class RadioFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val myWebView: WebView = view.findViewById(R.id.WebView3)
-        myWebView.webViewClient = object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(
-                view: WebView?,
-                url: String?
-            ): Boolean {
-                if (url == "https://radio.motioncorpbymmtc.id/index.php/stream-video/") {
-                    MyAsyncTask(myWebView).execute(url2)
-                    return true
-                } else if (url == "https://radio.motioncorpbymmtc.id/index.php/stream-audio/") {
-                    MyAsyncTask(myWebView).execute(url3)
-                    return true
-                } else if (url == "https://radio.motioncorpbymmtc.id/index.php/damkar/") {
-                    MyAsyncTask(myWebView).execute(url4)
-                } else if (url == "https://radio.motioncorpbymmtc.id/index.php/fyi/") {
-                    MyAsyncTask(myWebView).execute(url5)
-                }
-                return false
-            }
-        }
-
         val webSetting: WebSettings = myWebView.settings
         webSetting.javaScriptEnabled = true
         webSetting.setDomStorageEnabled(true)
@@ -101,7 +66,22 @@ class RadioFragment : Fragment() {
             false
         })
 
-        // Menangani klik tombol full screen YouTube
+        myWebView.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(
+                view: WebView?,
+                url: String?
+            ): Boolean {
+                isExitingFullScreen = url == currentUrl
+                when (url) {
+                    url2 -> MyAsyncTask(myWebView).execute(url2)
+                    url3 -> MyAsyncTask(myWebView).execute(url3)
+                    url4 -> MyAsyncTask(myWebView).execute(url4)
+                    url5 -> MyAsyncTask(myWebView).execute(url5)
+                }
+                return false
+            }
+        }
+
         myWebView.webChromeClient = object : WebChromeClient() {
             var originalOrientation = 0
             var originalSystemUiVisibility = 0
@@ -109,27 +89,27 @@ class RadioFragment : Fragment() {
             var customViewCallback: WebChromeClient.CustomViewCallback? = null
 
             override fun getDefaultVideoPoster(): Bitmap? {
-                return if (customView == null) {
-                    null
-                } else {
+                return customView?.let {
                     BitmapFactory.decodeResource(resources, 2130837573)
-                }
+                } ?: null
             }
 
             override fun onHideCustomView() {
                 if (customView != null) {
-                    (requireActivity().window.decorView as FrameLayout).removeView(customView)
-                    customView = null
-                    requireActivity().window.decorView.systemUiVisibility = originalSystemUiVisibility
-                    requireActivity().requestedOrientation = originalOrientation
-                    customViewCallback?.onCustomViewHidden()
-                    customViewCallback = null
-
-                    if (fullScreenUrl != null) {
-                        // Kembali ke URL full screen setelah keluar dari mode layar penuh
-                        MyAsyncTask(myWebView).execute(fullScreenUrl)
-                        fullScreenUrl = null
+                    if (isExitingFullScreen) {
+                        if (fullScreenUrl != null) {
+                            MyAsyncTask(myWebView).execute(fullScreenUrl)
+                            fullScreenUrl = null
+                        }
+                    } else {
+                        (requireActivity().window.decorView as FrameLayout).removeView(customView)
+                        customView = null
+                        requireActivity().window.decorView.systemUiVisibility = originalSystemUiVisibility
+                        requireActivity().requestedOrientation = originalOrientation
+                        customViewCallback?.onCustomViewHidden()
+                        customViewCallback = null
                     }
+                    isExitingFullScreen = false
                 }
             }
 
@@ -153,7 +133,6 @@ class RadioFragment : Fragment() {
             }
         }
 
-        // Menggunakan AsyncTask untuk mengambil dan memproses HTML
         MyAsyncTask(myWebView).execute(url1)
     }
 
@@ -197,7 +176,6 @@ class RadioFragment : Fragment() {
                 document.getElementsByClass("elementor-menu-toggle__icon--open eicon-menu-bar")
                     .remove()
                 document.getElementsByClass("attachment-full size-full wp-image-2474").remove()
-
             } catch (e: IOException) {
                 e.printStackTrace()
             }
@@ -215,7 +193,6 @@ class RadioFragment : Fragment() {
             progressBar.visibility = View.GONE
             loadingMessage.text = ""
 
-            // Tambahkan kode JavaScript setelah menampilkan halaman web
             val javascriptCode = """
         var iframes = document.getElementsByTagName('iframe');
         for (var i = 0; i < iframes.length; i++) {
