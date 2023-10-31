@@ -74,15 +74,17 @@ class RadioFragment : Fragment() {
                 url: String?
             ): Boolean {
                 when (url) {
-                    "https://radio.motioncorpbymmtc.id/index.php/stream-video/" -> {
-                        MyAsyncTask(myWebView).execute(url2)
-                        return true
-                    }
+                    "https://radio.motioncorpbymmtc.id/index.php/stream-video/" -> MyAsyncTask(
+                        myWebView
+                    ).execute(
+                        url2
+                    )
 
-                    "https://radio.motioncorpbymmtc.id/index.php/stream-audio/" -> {
-                        MyAsyncTask(myWebView).execute(url3)
-                        return true
-                    }
+                    "https://radio.motioncorpbymmtc.id/index.php/stream-audio/" -> MyAsyncTask(
+                        myWebView
+                    ).execute(
+                        url3
+                    )
 
                     "https://radio.motioncorpbymmtc.id/index.php/damkar/" -> MyAsyncTask(myWebView).execute(
                         url4
