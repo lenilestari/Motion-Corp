@@ -25,6 +25,8 @@ class RadioFragment : Fragment() {
     private val url3 = "https://radio.motioncorpbymmtc.id/index.php/stream-audio/"
     private val url4 = "https://radio.motioncorpbymmtc.id/index.php/damkar/"
     private val url5 = "https://radio.motioncorpbymmtc.id/index.php/fyi/"
+    private val url6 = "https://radio.motioncorpbymmtc.id/index.php/on-duta/"
+    private val url7 = "https://radio.motioncorpbymmtc.id/index.php/gema-budaya/"
     private var currentUrl: String = url1
     private var fullScreenUrl: String? = null // Tidak perlu diinisialisasi dengan url2
     private var isExitingFullScreen = false
@@ -77,8 +79,10 @@ class RadioFragment : Fragment() {
                     url3 -> MyAsyncTask(myWebView).execute(url3)
                     url4 -> MyAsyncTask(myWebView).execute(url4)
                     url5 -> MyAsyncTask(myWebView).execute(url5)
+                    url6 -> MyAsyncTask(myWebView).execute(url6)
+                    url7 -> MyAsyncTask(myWebView).execute(url7)
                 }
-                return false
+                return true
             }
         }
 
@@ -150,17 +154,17 @@ class RadioFragment : Fragment() {
             var document: Document? = null
             try {
                 document = Jsoup.connect(url).get()
-                document.getElementsByClass("skip-link screen-reader-text").remove()
+                document.getElementsByClass("skip-link screen-reader-text")
+                    .remove()
                 document.getElementsByClass("elementor-element elementor-element-19762840 elementor-widget elementor-widget-theme-site-logo elementor-widget-image")
                     .remove()
                 document.getElementsByClass("elementor elementor-2069 elementor-location-footer")
                     .remove()
                 document.getElementsByClass("elementor elementor-2572 elementor-location-header")
                     .remove()
-                document.getElementsByClass("skip-link screen-reader-text").remove()
-                document.getElementsByClass("elementor elementor-2156 elementor-location-header")
+                document.getElementsByClass("skip-link screen-reader-text")
                     .remove()
-                document.getElementsByClass("elementor-section elementor-top-section elementor-element elementor-element-2ff5023f elementor-section-height-min-height elementor-section-boxed elementor-section-height-default elementor-section-items-middle")
+                document.getElementsByClass("elementor elementor-2156 elementor-location-header")
                     .remove()
                 document.getElementsByClass("elementor-section elementor-top-section elementor-element elementor-element-1667493 elementor-section-boxed elementor-section-height-default elementor-section-height-default")
                     .remove()
@@ -170,12 +174,16 @@ class RadioFragment : Fragment() {
                     .remove()
                 document.getElementsByClass("elementor elementor-2069 elementor-location-footer")
                     .remove()
-                document.getElementsByClass("elementor-background-slideshow_slide_image").remove()
-                document.getElementsByClass("elementor-section elementor-top-section elementor-element elementor-element-5051ca45 elementor-section-boxed elementor-section-height-default elementor-section-height-default")
+                document.getElementsByClass("elementor-background-slideshow_slide_image")
                     .remove()
                 document.getElementsByClass("elementor-menu-toggle__icon--open eicon-menu-bar")
                     .remove()
-                document.getElementsByClass("attachment-full size-full wp-image-2474").remove()
+                document.getElementsByClass("attachment-full size-full wp-image-2474")
+                    .remove()
+                document.getElementsByClass("elementor elementor-2069 elementor-location-footer")
+                    .remove()
+                document.getElementsByClass("elementor-section elementor-top-section elementor-element elementor-element-2ff5023f elementor-section-height-min-height elementor-section-boxed elementor-section-height-default elementor-section-items-middle")
+                    .remove()
             } catch (e: IOException) {
                 e.printStackTrace()
             }

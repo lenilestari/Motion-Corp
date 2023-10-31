@@ -84,7 +84,7 @@ class TelevisiFragment : Fragment() {
                 when (url) {
                     url2 -> MyAsyncTask(myWebView).execute(url2)
                 }
-                return false
+                return true
             }
         }
 
