@@ -73,22 +73,31 @@ class RadioFragment : Fragment() {
                 view: WebView?,
                 url: String?
             ): Boolean {
-                if (url != null) {
-                    isExitingFullScreen = url == currentUrl
-                    when (url) {
-                        url2 -> MyAsyncTask(myWebView).execute(url2)
-                        url3 -> MyAsyncTask(myWebView).execute(url3)
-                        url4 -> MyAsyncTask(myWebView).execute(url4)
-                        url5 -> MyAsyncTask(myWebView).execute(url5)
-                        url6 -> MyAsyncTask(myWebView).execute(url6)
-                        url7 -> MyAsyncTask(myWebView).execute(url7)
+                when (url) {
+                    "https://radio.motioncorpbymmtc.id/index.php/stream-video/" -> {
+                        MyAsyncTask(myWebView).execute(url2)
+                        return true
                     }
-                    return true
+
+                    "https://radio.motioncorpbymmtc.id/index.php/stream-audio/" -> {
+                        MyAsyncTask(myWebView).execute(url3)
+                        return true
+                    }
+
+                    "https://radio.motioncorpbymmtc.id/index.php/damkar/" -> MyAsyncTask(myWebView).execute(
+                        url4
+                    )
+
+                    "https://radio.motioncorpbymmtc.id/index.php/fyi/" -> MyAsyncTask(myWebView).execute(
+                        url5
+                    )
+
+                    else -> return false
                 }
                 return false
             }
 
-    }
+        }
 
         myWebView.webChromeClient = object : WebChromeClient() {
             var originalOrientation = 0
@@ -112,7 +121,8 @@ class RadioFragment : Fragment() {
                     } else {
                         (requireActivity().window.decorView as FrameLayout).removeView(customView)
                         customView = null
-                        requireActivity().window.decorView.systemUiVisibility = originalSystemUiVisibility
+                        requireActivity().window.decorView.systemUiVisibility =
+                            originalSystemUiVisibility
                         requireActivity().requestedOrientation = originalOrientation
                         customViewCallback?.onCustomViewHidden()
                         customViewCallback = null
@@ -121,7 +131,10 @@ class RadioFragment : Fragment() {
                 }
             }
 
-            override fun onShowCustomView(paramView: View, paramCustomViewCallback: WebChromeClient.CustomViewCallback) {
+            override fun onShowCustomView(
+                paramView: View,
+                paramCustomViewCallback: WebChromeClient.CustomViewCallback
+            ) {
                 if (customView != null) {
                     onHideCustomView()
                     return
@@ -132,10 +145,12 @@ class RadioFragment : Fragment() {
                 originalOrientation = requireActivity().requestedOrientation
                 customViewCallback = paramCustomViewCallback
 
-                (requireActivity().window.decorView as FrameLayout).addView(customView,
+                (requireActivity().window.decorView as FrameLayout).addView(
+                    customView,
                     ViewGroup.LayoutParams(-1, -1)
                 )
-                requireActivity().window.decorView.systemUiVisibility = 3846 or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                requireActivity().window.decorView.systemUiVisibility =
+                    3846 or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 
                 fullScreenUrl = myWebView.url
             }
