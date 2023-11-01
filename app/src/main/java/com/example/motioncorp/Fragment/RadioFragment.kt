@@ -3,6 +3,7 @@ package com.example.motioncorp.Fragment
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.webkit.*
@@ -41,11 +42,25 @@ class RadioFragment : Fragment() {
         _binding = FragmentRadioBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+
         progressBar = root.findViewById(R.id.Progressbar_Home)
         loadingMessage = root.findViewById(R.id.loadingMessage)
         loadingMessage.text = "Tunggu sebentar..."
 
         return root
+    }
+
+
+    fun getStatusBarHeight(): Int {
+        var statusBarHeight = 0
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val resourceId =
+                requireContext().resources.getIdentifier("status_bar_height", "dimen", "android")
+            if (resourceId > 0) {
+                statusBarHeight = requireContext().resources.getDimensionPixelSize(resourceId)
+            }
+        }
+        return statusBarHeight
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,6 +71,7 @@ class RadioFragment : Fragment() {
         webSetting.allowFileAccess = true
         webSetting.allowContentAccess = true
         webSetting.mediaPlaybackRequiresUserGesture = false
+        getStatusBarHeight()
 
         myWebView.settings.javaScriptEnabled = true
 
@@ -67,17 +83,22 @@ class RadioFragment : Fragment() {
             false
         })
 
-
         myWebView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(
                 view: WebView?, url: String?
             ): Boolean {
+                binding.rootView.fitsSystemWindows = true
+                binding.rootView.setPadding(
+                    binding.rootView.paddingLeft,
+                    binding.rootView.paddingTop,
+                    binding.rootView.paddingRight,
+                    binding.rootView.paddingBottom
+                )
+
                 when (MyAsyncTask(myWebView).execute(url).toString()) {
                     url2 -> myWebView.evaluateJavascript(
-                        "javascript:  " +
-                                "var inputTextMotion = document.getElementById('password'); " +
-                                "inputTextMotion.value = ''; " +
-                                "inputTextMotion.dispatchEvent(new Event('input')) ", null
+                        "javascript:  " + "var inputText = document.getElementById('password'); " + "password.value = 'test'; " + "password.dispatchEvent(new Event('input')) ",
+                        null
                     );
 
                     url10 -> removeHeaderStyleRadio(myWebView)

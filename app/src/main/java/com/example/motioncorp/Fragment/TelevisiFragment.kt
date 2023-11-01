@@ -83,10 +83,10 @@ class TelevisiFragment : Fragment() {
                 view: WebView?,
                 url: String?
             ): Boolean {
-                if (url == url2) {
-                    MyAsyncTask(myWebView).execute(url2)
-                    return true
-                }
+               when (MyAsyncTask(myWebView).execute(url).toString()) {
+                   url2 -> removeHeaderStyleTv(myWebView)
+                   else -> return true
+               }
                 return false
             }
 
@@ -160,6 +160,13 @@ class TelevisiFragment : Fragment() {
         }
 
         MyAsyncTask(myWebView).execute(url1)
+    }
+
+
+    private fun removeHeaderStyleTv(myWebView: WebView) {
+        myWebView.loadUrl(
+            "javascript:(function() { " + "var head = document.getElementsByTagName('footer')[0];" + "head.parentNode.removeChild(head);" + "})()"
+        );
     }
 
     private inner class MyAsyncTask(private val webView: WebView) :
