@@ -21,20 +21,22 @@ class RadioFragment : Fragment() {
     private lateinit var loadingMessage: TextView
 
     private val url1 = "https://radio.motioncorpbymmtc.id/"
-    private val url2 = "https://radio.motioncorpbymmtc.id/index.php/stream-video/"
-    private val url3 = "https://radio.motioncorpbymmtc.id/index.php/stream-audio/"
-    private val url4 = "https://radio.motioncorpbymmtc.id/index.php/damkar/"
-    private val url5 = "https://radio.motioncorpbymmtc.id/index.php/fyi/"
-    private val url6 = "https://radio.motioncorpbymmtc.id/index.php/on-duta/"
-    private val url7 = "https://radio.motioncorpbymmtc.id/index.php/gema-budaya/"
+    private val url2 = "https://radio.motioncorpbymmtc.id/motion-video-live/"
+    private val url10 = "https://radio.motioncorpbymmtc.id/video-on-demand/"
+    private val url3 = "https://radio.motioncorpbymmtc.id/motion-audio-live/"
+    private val url4 = "https://radio.motioncorpbymmtc.id/damkar/"
+    private val url5 = "https://radio.motioncorpbymmtc.id/fyi/"
+    private val url6 = "https://radio.motioncorpbymmtc.id/on-duta/"
+    private val url7 = "https://radio.motioncorpbymmtc.id/gema-budaya/"
+    private val url8 = "https://radio.motioncorpbymmtc.id/2pm-show/"
+    private val url9 = "https://radio.motioncorpbymmtc.id/20vers/"
+
     private var currentUrl: String = url1
     private var fullScreenUrl: String? = null // Tidak perlu diinisialisasi dengan url2
     private var isExitingFullScreen = false
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentRadioBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -58,48 +60,50 @@ class RadioFragment : Fragment() {
         myWebView.settings.javaScriptEnabled = true
 
         myWebView.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
-            if (keyCode == KeyEvent.KEYCODE_BACK
-                && event.action == MotionEvent.ACTION_UP
-                && myWebView.canGoBack()
-            ) {
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.action == MotionEvent.ACTION_UP && myWebView.canGoBack()) {
                 myWebView.goBack()
                 return@OnKeyListener true
             }
             false
         })
 
+
         myWebView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(
-                view: WebView?,
-                url: String?
+                view: WebView?, url: String?
             ): Boolean {
-                when (url) {
-                    "https://radio.motioncorpbymmtc.id/index.php/stream-video/" -> MyAsyncTask(
-                        myWebView
-                    ).execute(
-                        url2
-                    )
+                when (MyAsyncTask(myWebView).execute(url).toString()) {
+                    url2 -> myWebView.evaluateJavascript(
+                        "javascript:  " +
+                                "var inputTextMotion = document.getElementById('password'); " +
+                                "inputTextMotion.value = ''; " +
+                                "inputTextMotion.dispatchEvent(new Event('input')) ", null
+                    );
 
-                    "https://radio.motioncorpbymmtc.id/index.php/stream-audio/" -> MyAsyncTask(
-                        myWebView
-                    ).execute(
-                        url3
-                    )
+                    url10 -> removeHeaderStyleRadio(myWebView)
 
-                    "https://radio.motioncorpbymmtc.id/index.php/damkar/" -> MyAsyncTask(myWebView).execute(
-                        url4
-                    )
+                    url3 -> removeHeaderStyleRadio(myWebView)
 
-                    "https://radio.motioncorpbymmtc.id/index.php/fyi/" -> MyAsyncTask(myWebView).execute(
-                        url5
-                    )
+                    url4 -> removeHeaderStyleRadio(myWebView)
 
-                    else -> return false
+                    url5 -> removeHeaderStyleRadio(myWebView)
+
+                    url6 -> removeHeaderStyleRadio(myWebView)
+
+                    url7 -> removeHeaderStyleRadio(myWebView)
+
+                    url8 -> removeHeaderStyleRadio(myWebView)
+
+                    url9 -> removeHeaderStyleRadio(myWebView)
+
+                    else -> return true
                 }
                 return false
             }
 
         }
+
+
 
         myWebView.webChromeClient = object : WebChromeClient() {
             var originalOrientation = 0
@@ -134,8 +138,7 @@ class RadioFragment : Fragment() {
             }
 
             override fun onShowCustomView(
-                paramView: View,
-                paramCustomViewCallback: WebChromeClient.CustomViewCallback
+                paramView: View, paramCustomViewCallback: WebChromeClient.CustomViewCallback
             ) {
                 if (customView != null) {
                     onHideCustomView()
@@ -148,8 +151,7 @@ class RadioFragment : Fragment() {
                 customViewCallback = paramCustomViewCallback
 
                 (requireActivity().window.decorView as FrameLayout).addView(
-                    customView,
-                    ViewGroup.LayoutParams(-1, -1)
+                    customView, ViewGroup.LayoutParams(-1, -1)
                 )
                 requireActivity().window.decorView.systemUiVisibility =
                     3846 or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -159,6 +161,13 @@ class RadioFragment : Fragment() {
         }
 
         MyAsyncTask(myWebView).execute(url1)
+    }
+
+
+    private fun removeHeaderStyleRadio(myWebView: WebView) {
+        myWebView.loadUrl(
+            "javascript:(function() { " + "var head = document.getElementsByTagName('footer')[0];" + "head.parentNode.removeChild(head);" + "})()"
+        );
     }
 
     private inner class MyAsyncTask(private val webView: WebView) :
@@ -175,35 +184,36 @@ class RadioFragment : Fragment() {
             var document: Document? = null
             try {
                 document = Jsoup.connect(url).get()
-                document.getElementsByClass("skip-link screen-reader-text")
-                    .remove()
+                document.getElementsByClass("skip-link screen-reader-text").remove()
                 document.getElementsByClass("elementor-element elementor-element-19762840 elementor-widget elementor-widget-theme-site-logo elementor-widget-image")
                     .remove()
                 document.getElementsByClass("elementor elementor-2069 elementor-location-footer")
                     .remove()
                 document.getElementsByClass("elementor elementor-2572 elementor-location-header")
                     .remove()
-                document.getElementsByClass("skip-link screen-reader-text")
-                    .remove()
+                document.getElementsByClass("skip-link screen-reader-text").remove()
                 document.getElementsByClass("elementor elementor-2156 elementor-location-header")
                     .remove()
                 document.getElementsByClass("elementor-section elementor-top-section elementor-element elementor-element-1667493 elementor-section-boxed elementor-section-height-default elementor-section-height-default")
                     .remove()
                 document.getElementsByClass("elementor elementor-2156 elementor-location-header")
                     .remove()
-                document.getElementsByClass("elementor-button elementor-button-link elementor-size-sm")
-                    .remove()
                 document.getElementsByClass("elementor elementor-2069 elementor-location-footer")
                     .remove()
-                document.getElementsByClass("elementor-background-slideshow_slide_image")
-                    .remove()
+                document.getElementsByClass("elementor-background-slideshow_slide_image").remove()
                 document.getElementsByClass("elementor-menu-toggle__icon--open eicon-menu-bar")
                     .remove()
-                document.getElementsByClass("attachment-full size-full wp-image-2474")
-                    .remove()
+                document.getElementsByClass("attachment-full size-full wp-image-2474").remove()
                 document.getElementsByClass("elementor elementor-2069 elementor-location-footer")
                     .remove()
                 document.getElementsByClass("elementor-section elementor-top-section elementor-element elementor-element-2ff5023f elementor-section-height-min-height elementor-section-boxed elementor-section-height-default elementor-section-items-middle")
+                    .remove()
+
+                document.getElementsByClass("has_eae_slider elementor-section elementor-inner-section elementor-element elementor-element-55a947c5 elementor-section-boxed elementor-section-height-default elementor-section-height-default elementor-sticky")
+                    .remove()
+                document.getElementsByClass("elementor-element elementor-element-c030feb elementor-widget elementor-widget-image")
+                    .remove()
+                document.getElementsByClass("elementor-element elementor-element-0a9d5e8 elementor-widget elementor-widget-button")
                     .remove()
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -229,7 +239,6 @@ class RadioFragment : Fragment() {
             iframe.setAttribute('allowfullscreen', 'true');
         }
     """
-
             webView.post {
                 webView.evaluateJavascript(javascriptCode, null)
             }

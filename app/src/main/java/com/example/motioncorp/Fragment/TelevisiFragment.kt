@@ -16,7 +16,10 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.Log
 import android.view.ViewGroup.LayoutParams
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
 import android.widget.FrameLayout
 import com.example.motioncorp.R
 import com.example.motioncorp.databinding.FragmentTelevisiBinding
@@ -85,6 +88,23 @@ class TelevisiFragment : Fragment() {
                     return true
                 }
                 return false
+            }
+
+            override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
+                // Mengecek URL permintaan
+                val url = request?.url.toString()
+
+                // URL yang ingin Anda blokir
+                val blockedUrl = "https://organizations.minnit.chat/js/logjserror.js?mid=1693053978"
+
+                if (url == blockedUrl) {
+                    // Blokir permintaan ke URL yang Anda tentukan
+                    return WebResourceResponse("text/javascript", "utf-8", null)
+                }
+
+                // Izinkan permintaan sumber eksternal lainnya
+                return super.shouldInterceptRequest(view, request)
+                Log.d("Minnit chat", "Blokir TTS")
             }
         }
 
@@ -156,7 +176,6 @@ class TelevisiFragment : Fragment() {
             var document: Document? = null
             try {
                 document = Jsoup.connect(url).get()
-                document = Jsoup.connect(url).get()
                 document.getElementsByClass("elementor elementor-24 elementor-location-header")
                     .remove()
                 document.getElementsByClass("elementor elementor-40 elementor-location-footer")
@@ -187,9 +206,18 @@ class TelevisiFragment : Fragment() {
             val javascriptCode = """
                 var iframes = document.getElementsByTagName('iframe');
                 for (var i = 0; i < iframes.length; i++) {
-                    var iframe = iframes[i];
-                    iframe.setAttribute('allowfullscreen', 'true');
+                var iframe = iframes[i];
+                iframe.setAttribute('allowfullscreen', 'true');
                 }
+                
+                if (window.speechSynthesis) {
+                // Hanya jika window.speechSynthesis tersedia
+                window.speechSynthesis.cancel(); // Menonaktifkan TTS
+                if (window.speechSynthesis.getVoices) {
+                window.speechSynthesis.getVoices = function() { return []; }; // Mengembalikan daftar suara kosong 
+                } 
+            }
+
             """
 
             webView.post {
