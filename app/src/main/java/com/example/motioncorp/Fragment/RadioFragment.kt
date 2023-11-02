@@ -1,5 +1,6 @@
 package com.example.motioncorp.Fragment
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -8,6 +9,7 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.webkit.*
 import android.widget.*
 import androidx.fragment.app.Fragment
@@ -35,9 +37,7 @@ class RadioFragment : Fragment() {
     private var isExitingFullScreen = false
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentRadioBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -47,6 +47,15 @@ class RadioFragment : Fragment() {
         loadingMessage.text = "Tunggu sebentar..."
 
         return root
+    }
+
+    private fun showSoftKeyboard(view: View) {
+
+        if (view.requestFocus()) {
+            val imm =
+                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,13 +70,13 @@ class RadioFragment : Fragment() {
         webSetting.setRenderPriority(WebSettings.RenderPriority.HIGH)
         myWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
 
-        myWebView.settings.javaScriptEnabled = true
+//        myWebView.settings.javaScriptEnabled = true
+
+        showSoftKeyboard(myWebView)
+
 
         myWebView.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
-            if (keyCode == KeyEvent.KEYCODE_BACK
-                && event.action == MotionEvent.ACTION_UP
-                && myWebView.canGoBack()
-            ) {
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.action == MotionEvent.ACTION_UP && myWebView.canGoBack()) {
                 myWebView.goBack()
                 return@OnKeyListener true
             }
@@ -76,8 +85,7 @@ class RadioFragment : Fragment() {
 
         myWebView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(
-                view: WebView?,
-                url: String?
+                view: WebView?, url: String?
             ): Boolean {
                 if (isExternalLink(url)) {
                     openExternalLink(url)
@@ -89,17 +97,21 @@ class RadioFragment : Fragment() {
                             removeHeaderStyleTv(myWebView)
                             return true
                         }
+
                         url3 -> {
                             removeHeaderStyleTv(myWebView)
                             return true
                         }
+
                         else -> return true
                     }
                 }
             }
 
 
-            override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
+            override fun shouldInterceptRequest(
+                view: WebView?, request: WebResourceRequest?
+            ): WebResourceResponse? {
                 // Mengecek URL permintaan
                 val url = request?.url.toString()
 
@@ -150,8 +162,7 @@ class RadioFragment : Fragment() {
             }
 
             override fun onShowCustomView(
-                paramView: View,
-                paramCustomViewCallback: WebChromeClient.CustomViewCallback
+                paramView: View, paramCustomViewCallback: WebChromeClient.CustomViewCallback
             ) {
                 if (customView != null) {
                     onHideCustomView()
@@ -164,8 +175,7 @@ class RadioFragment : Fragment() {
                 customViewCallback = paramCustomViewCallback
 
                 (requireActivity().window.decorView as FrameLayout).addView(
-                    customView,
-                    ViewGroup.LayoutParams(-1, -1)
+                    customView, ViewGroup.LayoutParams(-1, -1)
                 )
                 requireActivity().window.decorView.systemUiVisibility =
                     3846 or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -197,16 +207,14 @@ class RadioFragment : Fragment() {
             var document: Document? = null
             try {
                 document = Jsoup.connect(url).get()
-                document.getElementsByClass("skip-link screen-reader-text")
-                    .remove()
+                document.getElementsByClass("skip-link screen-reader-text").remove()
                 document.getElementsByClass("elementor-element elementor-element-19762840 elementor-widget elementor-widget-theme-site-logo elementor-widget-image")
                     .remove()
                 document.getElementsByClass("elementor elementor-2069 elementor-location-footer")
                     .remove()
                 document.getElementsByClass("elementor elementor-2572 elementor-location-header")
                     .remove()
-                document.getElementsByClass("skip-link screen-reader-text")
-                    .remove()
+                document.getElementsByClass("skip-link screen-reader-text").remove()
                 document.getElementsByClass("elementor elementor-2156 elementor-location-header")
                     .remove()
                 document.getElementsByClass("elementor-section elementor-top-section elementor-element elementor-element-1667493 elementor-section-boxed elementor-section-height-default elementor-section-height-default")
@@ -215,18 +223,18 @@ class RadioFragment : Fragment() {
                     .remove()
                 document.getElementsByClass("elementor elementor-2069 elementor-location-footer")
                     .remove()
-                document.getElementsByClass("elementor-background-slideshow_slide_image")
-                    .remove()
+                document.getElementsByClass("elementor-background-slideshow_slide_image").remove()
                 document.getElementsByClass("elementor-menu-toggle__icon--open eicon-menu-bar")
                     .remove()
-                document.getElementsByClass("attachment-full size-full wp-image-2474")
-                    .remove()
+                document.getElementsByClass("attachment-full size-full wp-image-2474").remove()
                 document.getElementsByClass("elementor elementor-2069 elementor-location-footer")
                     .remove()
                 document.getElementsByClass("elementor-section elementor-top-section elementor-element elementor-element-2ff5023f elementor-section-height-min-height elementor-section-boxed elementor-section-height-default elementor-section-items-middle")
                     .remove()
-                document.getElementsByClass("elementor-element elementor-element-0a9d5e8 elementor-widget elementor-widget-button").remove()
-                document.getElementsByClass("elementor-element elementor-element-c030feb elementor-widget elementor-widget-image").remove()
+                document.getElementsByClass("elementor-element elementor-element-0a9d5e8 elementor-widget elementor-widget-button")
+                    .remove()
+                document.getElementsByClass("elementor-element elementor-element-c030feb elementor-widget elementor-widget-image")
+                    .remove()
             } catch (e: IOException) {
                 e.printStackTrace()
             }
@@ -260,11 +268,10 @@ class RadioFragment : Fragment() {
 
 
     private fun isExternalLink(url: String?): Boolean {
-        val isExternal = url != null && (
-                url.startsWith("https://www.facebook.com/") ||
-                        url.startsWith("https://twitter.com/") || url.contains("twitter.com") ||
-                        url.startsWith("https://whatsapp.com/") || url.contains("whatsapp.com")
-                )
+        val isExternal =
+            url != null && (url.startsWith("https://www.facebook.com/") || url.startsWith("https://twitter.com/") || url.contains(
+                "twitter.com"
+            ) || url.startsWith("https://whatsapp.com/") || url.contains("whatsapp.com"))
         Log.d("ExternalLinkCheck", "URL: $url isExternal: $isExternal")
         return isExternal
     }

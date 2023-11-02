@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <uses-feature android:name="android.hardware.screen.landscape" />
 
 
@@ -36,7 +37,7 @@
             android:exported="false"
             android:theme="@style/Theme.MotionCorp" />
         <activity
-            android:name=".SplashScreen"
+            android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.MotionCorp">
 
@@ -48,7 +49,7 @@
 
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".SplashScreen"
             android:configChanges="orientation|screenSize"
             android:exported="false"
             android:theme="@style/Theme.MotionCorp">
