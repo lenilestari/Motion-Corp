@@ -223,6 +223,7 @@ class RadioFragment : Fragment() {
                 document.getElementsByClass("elementor-section elementor-top-section elementor-element elementor-element-2ff5023f elementor-section-height-min-height elementor-section-boxed elementor-section-height-default elementor-section-items-middle")
                     .remove()
                 document.getElementsByClass("elementor-element elementor-element-0a9d5e8 elementor-widget elementor-widget-button").remove()
+                document.getElementsByClass("elementor-element elementor-element-c030feb elementor-widget elementor-widget-image").remove()
             } catch (e: IOException) {
                 e.printStackTrace()
             }
