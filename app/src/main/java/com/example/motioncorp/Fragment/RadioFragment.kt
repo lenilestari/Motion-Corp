@@ -1,9 +1,12 @@
 package com.example.motioncorp.Fragment
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.webkit.*
 import android.widget.*
@@ -73,32 +76,42 @@ class RadioFragment : Fragment() {
                 view: WebView?,
                 url: String?
             ): Boolean {
-                when (url) {
-                    "https://radio.motioncorpbymmtc.id/index.php/stream-video/" -> MyAsyncTask(
-                        myWebView
-                    ).execute(
-                        url2
-                    )
-
-                    "https://radio.motioncorpbymmtc.id/index.php/stream-audio/" -> MyAsyncTask(
-                        myWebView
-                    ).execute(
-                        url3
-                    )
-
-                    "https://radio.motioncorpbymmtc.id/index.php/damkar/" -> MyAsyncTask(myWebView).execute(
-                        url4
-                    )
-
-                    "https://radio.motioncorpbymmtc.id/index.php/fyi/" -> MyAsyncTask(myWebView).execute(
-                        url5
-                    )
-
-                    else -> return false
+                if (isExternalLink(url)) {
+                    openExternalLink(url)
+                    return true
+                } else {
+                    val result = MyAsyncTask(myWebView).execute(url).get()
+                    when (result) {
+                        url2 -> {
+                            removeHeaderStyleTv(myWebView)
+                            return true
+                        }
+                        url3 -> {
+                            removeHeaderStyleTv(myWebView)
+                            return true
+                        }
+                        else -> return true
+                    }
                 }
-                return false
             }
 
+
+            override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
+                // Mengecek URL permintaan
+                val url = request?.url.toString()
+
+                // URL yang ingin Anda blokir
+                val blockedUrl = "https://organizations.minnit.chat/js/logjserror.js?mid=1693053978"
+
+                if (url == blockedUrl) {
+                    // Blokir permintaan ke URL yang Anda tentukan
+                    return WebResourceResponse("text/javascript", "utf-8", null)
+                }
+
+                // Izinkan permintaan sumber eksternal lainnya
+                return super.shouldInterceptRequest(view, request)
+                Log.d("Minnit chat", "Blokir TTS")
+            }
         }
 
         myWebView.webChromeClient = object : WebChromeClient() {
@@ -161,6 +174,12 @@ class RadioFragment : Fragment() {
         MyAsyncTask(myWebView).execute(url1)
     }
 
+    private fun removeHeaderStyleTv(myWebView: WebView) {
+        myWebView.loadUrl(
+            "javascript:(function() { " + "var head = document.getElementsByTagName('footer')[0];" + "head.parentNode.removeChild(head);" + "})()"
+        );
+    }
+
     private inner class MyAsyncTask(private val webView: WebView) :
         AsyncTask<String, Void, String>() {
 
@@ -191,8 +210,6 @@ class RadioFragment : Fragment() {
                     .remove()
                 document.getElementsByClass("elementor elementor-2156 elementor-location-header")
                     .remove()
-                document.getElementsByClass("elementor-button elementor-button-link elementor-size-sm")
-                    .remove()
                 document.getElementsByClass("elementor elementor-2069 elementor-location-footer")
                     .remove()
                 document.getElementsByClass("elementor-background-slideshow_slide_image")
@@ -205,6 +222,7 @@ class RadioFragment : Fragment() {
                     .remove()
                 document.getElementsByClass("elementor-section elementor-top-section elementor-element elementor-element-2ff5023f elementor-section-height-min-height elementor-section-boxed elementor-section-height-default elementor-section-items-middle")
                     .remove()
+                document.getElementsByClass("elementor-element elementor-element-0a9d5e8 elementor-widget elementor-widget-button").remove()
             } catch (e: IOException) {
                 e.printStackTrace()
             }
@@ -234,6 +252,22 @@ class RadioFragment : Fragment() {
                 webView.evaluateJavascript(javascriptCode, null)
             }
         }
+    }
+
+
+    private fun isExternalLink(url: String?): Boolean {
+        val isExternal = url != null && (
+                url.startsWith("https://www.facebook.com/") ||
+                        url.startsWith("https://twitter.com/") || url.contains("twitter.com") ||
+                        url.startsWith("https://whatsapp.com/") || url.contains("whatsapp.com")
+                )
+        Log.d("ExternalLinkCheck", "URL: $url isExternal: $isExternal")
+        return isExternal
+    }
+
+    private fun openExternalLink(url: String?) {
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(browserIntent)
     }
 
     override fun onDestroyView() {
