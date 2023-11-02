@@ -57,7 +57,7 @@ class InfoFragment : Fragment() {
                 url: String?
             ): Boolean {
 
-                currentUrl = url1 // Saat navigasi ke URL baru, simpan URL saat ini
+                currentUrl = url1
                 view?.loadUrl(url1)
                 return true
             }
@@ -68,13 +68,10 @@ class InfoFragment : Fragment() {
                 view: WebView?,
                 url: String?
             ): Boolean {
-                // Cek apakah URL adalah tautan eksternal yang ingin Anda buka di luar WebView
                 if (isExternalLink(url)) {
-                    // Buka URL menggunakan browser eksternal
                     openExternalLink(url)
                     return true
                 } else {
-                    // Biarkan WebView menavigasi ke URL tersebut
                     currentUrl = url1
                     view?.loadUrl(url1)
                     return true

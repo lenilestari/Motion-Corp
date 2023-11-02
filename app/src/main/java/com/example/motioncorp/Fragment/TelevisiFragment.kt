@@ -1,5 +1,6 @@
 package com.example.motioncorp.Fragment
 
+import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import android.view.KeyEvent
@@ -16,8 +17,8 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.util.Log
-import android.view.ViewGroup.LayoutParams
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.widget.FrameLayout
@@ -83,14 +84,24 @@ class TelevisiFragment : Fragment() {
                 view: WebView?,
                 url: String?
             ): Boolean {
-               when (MyAsyncTask(myWebView).execute(url).toString()) {
-                   url2 -> removeHeaderStyleTv(myWebView)
-                   else -> return true
-               }
-                return false
-            }
+                if (isExternalLink(url)) {
+                    openExternalLink(url)
+                    return true
+                } else {
+                    val result = MyAsyncTask(myWebView).execute(url).get()
+                    when (result) {
+                        url2 -> {
+                            removeHeaderStyleTv(myWebView)
+                            return true
+                        }
+                        else -> return true
+                    }
+                }
+        }
 
-            override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
+
+
+        override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
                 // Mengecek URL permintaan
                 val url = request?.url.toString()
 
@@ -232,6 +243,21 @@ class TelevisiFragment : Fragment() {
             }
         }
     }
+
+private fun isExternalLink(url: String?): Boolean {
+    val isExternal = url != null && (
+            url.startsWith("https://www.facebook.com/") ||
+                    url.startsWith("https://twitter.com/") || url.contains("twitter.com") ||
+                    url.startsWith("https://whatsapp.com/") || url.contains("whatsapp.com")
+            )
+    Log.d("ExternalLinkCheck", "URL: $url isExternal: $isExternal")
+    return isExternal
+}
+
+private fun openExternalLink(url: String?) {
+    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    startActivity(browserIntent)
+}
 
     override fun onDestroyView() {
         super.onDestroyView()
