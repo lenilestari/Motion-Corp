@@ -4,11 +4,13 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.webkit.*
 import android.widget.*
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import com.example.motioncorp.R
 import com.example.motioncorp.databinding.FragmentRadioBinding
@@ -43,6 +45,7 @@ class RadioFragment : Fragment() {
         _binding = FragmentRadioBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+
         progressBar = root.findViewById(R.id.Progressbar_Home)
         loadingMessage = root.findViewById(R.id.loadingMessage)
         loadingMessage.text = "Tunggu sebentar..."
@@ -51,14 +54,14 @@ class RadioFragment : Fragment() {
     }
 
     private fun showSoftKeyboard(view: View) {
-        val imm =
-            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+        if (view.requestFocus()) {
+            val imm =
+                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+        }
     }
 
-    @JavascriptInterface
-    fun showKeyBoard(myWebView: WebView) {
-        myWebView.requestFocus()
+    fun showKeyboard(myWebView: WebView) {
         showSoftKeyboard(myWebView)
     }
 
@@ -70,8 +73,8 @@ class RadioFragment : Fragment() {
         webSetting.allowFileAccess = true
         webSetting.allowContentAccess = true
         webSetting.mediaPlaybackRequiresUserGesture = false
-
-        showKeyboardStyleMinitChat(myWebView)
+        showSoftKeyboard(myWebView)
+        myWebView.settings.javaScriptEnabled = true
 
         myWebView.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_BACK && event.action == MotionEvent.ACTION_UP && myWebView.canGoBack()) {
@@ -94,17 +97,10 @@ class RadioFragment : Fragment() {
                 )
 
                 when (MyAsyncTask(myWebView).execute(url).toString()) {
-                    url2 -> myWebView.loadUrl(
-                        """
-    document.getElementById("textbox").onclick = function() {
-        if (this.id === "textbox") {
-            AndroidInterface.showKeyboard();
-            
-        }
-    };
-"""
-
-                    )
+                    url2 -> myWebView.evaluateJavascript(
+                        "javascript:  " + "var inputText = document.getElementById('password'); " + "password.value = 'test'; " + "password.dispatchEvent(new Event('input')) ",
+                        null
+                    );
 
                     url10 -> removeHeaderStyleRadio(myWebView)
 
@@ -128,6 +124,7 @@ class RadioFragment : Fragment() {
             }
 
         }
+
 
 
         myWebView.webChromeClient = object : WebChromeClient() {
@@ -193,18 +190,6 @@ class RadioFragment : Fragment() {
         myWebView.loadUrl(
             "javascript:(function() { " + "var head = document.getElementsByTagName('footer')[0];" + "head.parentNode.removeChild(head);" + "})()"
         );
-    }
-
-    private fun showKeyboardStyleMinitChat(myWebView: WebView) {
-        val javascriptCode = """
-    document.getElementById("textbox").onclick = function() {
-        if (this.id === "textbox") {
-            AndroidInterface.showKeyboard();
-        }
-    };
-"""
-        myWebView.evaluateJavascript(javascriptCode, null)
-        showKeyBoard(myWebView)
     }
 
     private inner class MyAsyncTask(private val webView: WebView) :
