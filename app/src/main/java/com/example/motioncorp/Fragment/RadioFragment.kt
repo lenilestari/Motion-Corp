@@ -58,6 +58,9 @@ class RadioFragment : Fragment() {
         webSetting.allowContentAccess = true
         webSetting.mediaPlaybackRequiresUserGesture = false
 
+        webSetting.setRenderPriority(WebSettings.RenderPriority.HIGH)
+        myWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
+
         myWebView.settings.javaScriptEnabled = true
 
         myWebView.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->

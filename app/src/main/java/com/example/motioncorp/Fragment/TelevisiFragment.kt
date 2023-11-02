@@ -65,6 +65,9 @@ class TelevisiFragment : Fragment() {
         webSetting.allowContentAccess = true
         webSetting.mediaPlaybackRequiresUserGesture = false
 
+        webSetting.setRenderPriority(WebSettings.RenderPriority.HIGH)
+        myWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
+
         myWebView.canGoBack()
         myWebView.settings.javaScriptEnabled = true
 
