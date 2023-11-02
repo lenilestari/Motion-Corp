@@ -1,5 +1,6 @@
 package com.example.motioncorp.Fragment
 
+import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import android.view.KeyEvent
@@ -16,7 +17,10 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.view.ViewGroup.LayoutParams
+import android.net.Uri
+import android.util.Log
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
 import android.widget.FrameLayout
 import com.example.motioncorp.R
 import com.example.motioncorp.databinding.FragmentTelevisiBinding
@@ -80,11 +84,38 @@ class TelevisiFragment : Fragment() {
                 view: WebView?,
                 url: String?
             ): Boolean {
-                if (url == url2) {
-                    MyAsyncTask(myWebView).execute(url2)
+                if (isExternalLink(url)) {
+                    openExternalLink(url)
                     return true
+                } else {
+                    val result = MyAsyncTask(myWebView).execute(url).get()
+                    when (result) {
+                        url2 -> {
+                            removeHeaderStyleTv(myWebView)
+                            return true
+                        }
+                        else -> return true
+                    }
                 }
-                return false
+        }
+
+
+
+        override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
+                // Mengecek URL permintaan
+                val url = request?.url.toString()
+
+                // URL yang ingin Anda blokir
+                val blockedUrl = "https://organizations.minnit.chat/js/logjserror.js?mid=1693053978"
+
+                if (url == blockedUrl) {
+                    // Blokir permintaan ke URL yang Anda tentukan
+                    return WebResourceResponse("text/javascript", "utf-8", null)
+                }
+
+                // Izinkan permintaan sumber eksternal lainnya
+                return super.shouldInterceptRequest(view, request)
+                Log.d("Minnit chat", "Blokir TTS")
             }
         }
 
@@ -142,6 +173,13 @@ class TelevisiFragment : Fragment() {
         MyAsyncTask(myWebView).execute(url1)
     }
 
+
+    private fun removeHeaderStyleTv(myWebView: WebView) {
+        myWebView.loadUrl(
+            "javascript:(function() { " + "var head = document.getElementsByTagName('footer')[0];" + "head.parentNode.removeChild(head);" + "})()"
+        );
+    }
+
     private inner class MyAsyncTask(private val webView: WebView) :
         AsyncTask<String, Void, String>() {
 
@@ -155,7 +193,6 @@ class TelevisiFragment : Fragment() {
             val url = urls[0]
             var document: Document? = null
             try {
-                document = Jsoup.connect(url).get()
                 document = Jsoup.connect(url).get()
                 document.getElementsByClass("elementor elementor-24 elementor-location-header")
                     .remove()
@@ -187,9 +224,18 @@ class TelevisiFragment : Fragment() {
             val javascriptCode = """
                 var iframes = document.getElementsByTagName('iframe');
                 for (var i = 0; i < iframes.length; i++) {
-                    var iframe = iframes[i];
-                    iframe.setAttribute('allowfullscreen', 'true');
+                var iframe = iframes[i];
+                iframe.setAttribute('allowfullscreen', 'true');
                 }
+                
+                if (window.speechSynthesis) {
+                // Hanya jika window.speechSynthesis tersedia
+                window.speechSynthesis.cancel(); // Menonaktifkan TTS
+                if (window.speechSynthesis.getVoices) {
+                window.speechSynthesis.getVoices = function() { return []; }; // Mengembalikan daftar suara kosong 
+                } 
+            }
+
             """
 
             webView.post {
@@ -197,6 +243,21 @@ class TelevisiFragment : Fragment() {
             }
         }
     }
+
+private fun isExternalLink(url: String?): Boolean {
+    val isExternal = url != null && (
+            url.startsWith("https://www.facebook.com/") ||
+                    url.startsWith("https://twitter.com/") || url.contains("twitter.com") ||
+                    url.startsWith("https://whatsapp.com/") || url.contains("whatsapp.com")
+            )
+    Log.d("ExternalLinkCheck", "URL: $url isExternal: $isExternal")
+    return isExternal
+}
+
+private fun openExternalLink(url: String?) {
+    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    startActivity(browserIntent)
+}
 
     override fun onDestroyView() {
         super.onDestroyView()
