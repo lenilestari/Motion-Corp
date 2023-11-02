@@ -1,11 +1,13 @@
 package com.example.motioncorp.Fragment
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.webkit.*
 import android.widget.*
 import androidx.fragment.app.Fragment
@@ -50,18 +52,14 @@ class RadioFragment : Fragment() {
         return root
     }
 
-
-    fun getStatusBarHeight(): Int {
-        var statusBarHeight = 0
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val resourceId =
-                requireContext().resources.getIdentifier("status_bar_height", "dimen", "android")
-            if (resourceId > 0) {
-                statusBarHeight = requireContext().resources.getDimensionPixelSize(resourceId)
-            }
+    private fun showSoftKeyboard(view: View) {
+        if (view.requestFocus()) {
+            val imm =
+                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
         }
-        return statusBarHeight
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val myWebView: WebView = view.findViewById(R.id.WebView3)
@@ -71,9 +69,10 @@ class RadioFragment : Fragment() {
         webSetting.allowFileAccess = true
         webSetting.allowContentAccess = true
         webSetting.mediaPlaybackRequiresUserGesture = false
-        getStatusBarHeight()
 
         myWebView.settings.javaScriptEnabled = true
+
+        showSoftKeyboard(myWebView)
 
         myWebView.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_BACK && event.action == MotionEvent.ACTION_UP && myWebView.canGoBack()) {
