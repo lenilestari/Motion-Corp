@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg2"
+    android:background="@drawable/bg1"
     android:orientation="vertical"
     tools:context=".Continue2">
 
@@ -13,7 +13,7 @@
         android:layout_height="300dp"
         android:layout_gravity="center"
         android:layout_marginTop="70dp"
-        android:src="@drawable/gambar_2"/>
+        android:src="@drawable/gambar2"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -21,6 +21,7 @@
         android:text="Live Streaming On Air"
         android:textColor="@color/white"
         android:textSize="20dp"
+        android:textStyle="bold"
         android:layout_marginTop="30dp"
         android:gravity="center"/>
 

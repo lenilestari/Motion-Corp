@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg2"
+    android:background="@drawable/bg1"
     android:orientation="vertical"
     tools:context=".Continue3">
 
@@ -13,7 +13,7 @@
         android:layout_height="300dp"
         android:layout_gravity="center"
         android:layout_marginTop="70dp"
-        android:src="@drawable/gambar_3" />
+        android:src="@drawable/gambar3" />
 
     <TextView
         android:layout_width="match_parent"
@@ -22,6 +22,7 @@
         android:gravity="center"
         android:text="Layanan Video On Demand"
         android:textColor="@color/white"
+        android:textStyle="bold"
         android:textSize="20dp" />
 
     <TextView
