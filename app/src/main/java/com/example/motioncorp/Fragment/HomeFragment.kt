@@ -220,7 +220,7 @@ class HomeFragment : Fragment() {
                 document.getElementsByClass("elementor elementor-40 elementor-location-footer").remove()
                 document.getElementsByClass("elementor-element elementor-element-1f524a1 elementor-widget elementor-widget-button").remove()
                 document.getElementsByClass("elementor-element elementor-element-5338298 elementor-mobile-align-right elementor-widget elementor-widget-button").remove()
-
+                document.getElementsByClass("elementor-element elementor-element-5d5bfb1 elementor-widget elementor-widget-image").remove()
             } catch (e: IOException) {
                 e.printStackTrace()
             }

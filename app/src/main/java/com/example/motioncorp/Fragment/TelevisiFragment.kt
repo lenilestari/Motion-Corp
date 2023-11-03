@@ -1,6 +1,7 @@
 package com.example.motioncorp.Fragment
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.AsyncTask
 import android.os.Bundle
 import android.view.KeyEvent
@@ -22,6 +23,7 @@ import android.util.Log
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.widget.FrameLayout
+import android.widget.Toast
 import com.example.motioncorp.R
 import com.example.motioncorp.databinding.FragmentTelevisiBinding
 import org.jsoup.Jsoup
@@ -177,6 +179,16 @@ class TelevisiFragment : Fragment() {
         }
 
         MyAsyncTask(myWebView).execute(url1)
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        if (newConfig.keyboardHidden === Configuration.KEYBOARDHIDDEN_YES) {
+            Toast.makeText(requireContext(), "Keyboard available", Toast.LENGTH_SHORT).show()
+        } else if (newConfig.keyboardHidden === Configuration.KEYBOARDHIDDEN_NO) {
+            Toast.makeText(requireContext(), "No keyboard", Toast.LENGTH_SHORT).show()
+        }
     }
 
 
