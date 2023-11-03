@@ -1,6 +1,7 @@
 package com.example.motioncorp.Fragment
 
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -152,6 +153,10 @@ class HomeFragment : Fragment() {
                             fullScreenUrl = null
                         }
                     } else {
+
+//                        // Ganti kembali ke orientasi semula
+//                        requireActivity().requestedOrientation = originalOrientation
+
                         (requireActivity().window.decorView as FrameLayout).removeView(customView)
                         customView = null
                         requireActivity().window.decorView.systemUiVisibility = originalSystemUiVisibility
@@ -174,6 +179,9 @@ class HomeFragment : Fragment() {
                 originalOrientation = requireActivity().requestedOrientation
                 customViewCallback = paramCustomViewCallback
 
+//                // Ganti orientasi ke landscape
+//                requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+
                 (requireActivity().window.decorView as FrameLayout).addView(customView,
                     ViewGroup.LayoutParams(-1, -1)
                 )
@@ -185,7 +193,6 @@ class HomeFragment : Fragment() {
 
         MyAsyncTask(myWebView).execute(url1)
     }
-
 
     private fun removeHeaderStyleTv(myWebView: WebView) {
         myWebView.loadUrl(
