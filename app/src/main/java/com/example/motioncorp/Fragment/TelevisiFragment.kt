@@ -36,6 +36,7 @@ class TelevisiFragment : Fragment() {
 
     private val url1 = "https://tv.motioncorpbymmtc.id/"
     private val url2 = "https://tv.motioncorpbymmtc.id/motion-tv-live"
+    private val url3 = "https://radio.motioncorpbymmtc.id/motion-audio-live/"
     private var currentUrl: String = url1
 
     private var fullScreenUrl: String? = null
@@ -94,6 +95,10 @@ class TelevisiFragment : Fragment() {
                     val result = MyAsyncTask(myWebView).execute(url).get()
                     when (result) {
                         url2 -> {
+                            removeHeaderStyleTv(myWebView)
+                            return true
+                        }
+                        url3 -> {
                             removeHeaderStyleTv(myWebView)
                             return true
                         }

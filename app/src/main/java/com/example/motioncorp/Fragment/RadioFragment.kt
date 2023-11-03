@@ -235,6 +235,7 @@ class RadioFragment : Fragment() {
                     .remove()
                 document.getElementsByClass("elementor-element elementor-element-c030feb elementor-widget elementor-widget-image")
                     .remove()
+                document.getElementsByClass("has_eae_slider elementor-column elementor-col-33 elementor-inner-column elementor-element elementor-element-55f2a001").remove()
             } catch (e: IOException) {
                 e.printStackTrace()
             }
@@ -269,9 +270,10 @@ class RadioFragment : Fragment() {
 
     private fun isExternalLink(url: String?): Boolean {
         val isExternal =
-            url != null && (url.startsWith("https://www.facebook.com/") || url.startsWith("https://twitter.com/") || url.contains(
-                "twitter.com"
-            ) || url.startsWith("https://whatsapp.com/") || url.contains("whatsapp.com"))
+            url != null && (url.startsWith("https://www.facebook.com/") ||
+                    url.startsWith("https://twitter.com/") || url.contains(
+                "twitter.com") ||
+                    url.startsWith("https://whatsapp.com/") || url.contains("whatsapp.com"))
         Log.d("ExternalLinkCheck", "URL: $url isExternal: $isExternal")
         return isExternal
     }

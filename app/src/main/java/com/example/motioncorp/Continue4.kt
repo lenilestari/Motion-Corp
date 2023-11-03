@@ -25,6 +25,7 @@ class Continue4 : AppCompatActivity() {
         continue4Image.setOnClickListener {
             val intentContinue4Image = Intent(this, MainActivity::class.java)
             startActivity(intentContinue4Image)
+            finish()
         }
     }
 }

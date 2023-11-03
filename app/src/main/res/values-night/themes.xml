@@ -1,7 +1,15 @@
+
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.MotionCorp" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    <style name="Base.Theme.MotionCorp.Dark" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">#1d434f</item>
+        <item name="colorPrimaryDark">#FFFFFF</item>
+
     </style>
+
+    <style name="CustomProgressBarStyle" parent="android:Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progress_bar</item>
+    </style>
+
+    <style name="Theme.MotionCorp.Dark" parent="Base.Theme.MotionCorp.Dark" />
+
 </resources>

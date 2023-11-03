@@ -2,7 +2,6 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.MotionCorp" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">#1d434f</item>
-
     </style>
 
 
@@ -11,4 +10,5 @@
     </style>
 
     <style name="Theme.MotionCorp" parent="Base.Theme.MotionCorp" />
+
 </resources>

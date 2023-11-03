@@ -1,6 +1,7 @@
 package com.example.motioncorp
 
 import android.content.Intent
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -22,10 +23,16 @@ class MainActivity : AppCompatActivity() {
     private val ID_NEWS = 4
     private val ID_INFO = 5
 
-    // Tambahkan variabel yang akan menyimpan tampilan fragment saat ini
     private var currentFragment: Fragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        val nightModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        when (nightModeFlags) {
+            Configuration.UI_MODE_NIGHT_YES -> setTheme(R.style.Theme_MotionCorp)
+            else -> setTheme(R.style.Theme_MotionCorp_Dark)
+        }
+
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root

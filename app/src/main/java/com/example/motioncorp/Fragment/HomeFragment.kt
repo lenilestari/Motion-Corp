@@ -39,6 +39,7 @@ class HomeFragment : Fragment() {
     private val url1 = "https://motioncorpbymmtc.id/"
     private val url2 = "https://tv.motioncorpbymmtc.id/"
     private val url3 = "https://tv.motioncorpbymmtc.id/motion-tv-live/"
+    private val url4 = "https://radio.motioncorpbymmtc.id/motion-audio-live/"
     private var currentUrl: String = url1 // Menyimpan URL saat ini
 
     private var fullScreenUrl: String? = null // Tidak perlu diinisialisasi dengan url2
@@ -101,6 +102,10 @@ class HomeFragment : Fragment() {
                             return true
                         }
                         url3 -> {
+                            removeHeaderStyleTv(myWebView)
+                            return true
+                        }
+                        url4 -> {
                             removeHeaderStyleTv(myWebView)
                             return true
                         }
