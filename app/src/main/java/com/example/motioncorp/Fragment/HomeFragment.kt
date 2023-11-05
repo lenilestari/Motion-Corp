@@ -1,5 +1,6 @@
 package com.example.motioncorp.Fragment
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
@@ -14,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -61,6 +63,20 @@ class HomeFragment : Fragment() {
         return root
     }
 
+    private fun showSoftKeyboard(view: View) {
+        if (view.requestFocus()) {
+            val imm =
+                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+        }
+    }
+
+    private fun hideSoftKeyboard(view: View) {
+        val imm =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val myWebView: WebView = view.findViewById(R.id.WebView1)
         val webSetting: WebSettings = myWebView.settings
@@ -88,10 +104,7 @@ class HomeFragment : Fragment() {
         })
 
         myWebView.webViewClient = object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(
-                view: WebView?,
-                url: String?
-            ): Boolean {
+            override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                 if (isExternalLink(url)) {
                     openExternalLink(url)
                     return true
@@ -99,21 +112,31 @@ class HomeFragment : Fragment() {
                     val result = MyAsyncTask(myWebView).execute(url).get()
                     when (result) {
                         url2 -> {
+                            showSoftKeyboard(myWebView)
                             removeHeaderStyleTv(myWebView)
                             return true
                         }
                         url3 -> {
+                            showSoftKeyboard(myWebView)
                             removeHeaderStyleTv(myWebView)
                             return true
                         }
                         url4 -> {
+                            showSoftKeyboard(myWebView)
                             removeHeaderStyleTv(myWebView)
                             return true
                         }
-                        else -> return true
+                        else -> {
+                            if (url == url1) {
+                                hideSoftKeyboard(myWebView)
+                            }
+                            return false
+                        }
+
                     }
                 }
             }
+
 
             override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
                 // Mengecek URL permintaan

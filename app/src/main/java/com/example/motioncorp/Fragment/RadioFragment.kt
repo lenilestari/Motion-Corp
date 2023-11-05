@@ -26,8 +26,8 @@ class RadioFragment : Fragment() {
     private lateinit var loadingMessage: TextView
 
     private val url1 = "https://radio.motioncorpbymmtc.id/"
-    private val url2 = "https://radio.motioncorpbymmtc.id/index.php/stream-video/"
-    private val url3 = "https://radio.motioncorpbymmtc.id/index.php/stream-audio/"
+    private val url2 = "https://radio.motioncorpbymmtc.id/motion-video-live/"
+    private val url3 = "https://radio.motioncorpbymmtc.id/motion-audio-live/"
     private val url4 = "https://radio.motioncorpbymmtc.id/index.php/damkar/"
     private val url5 = "https://radio.motioncorpbymmtc.id/index.php/fyi/"
     private val url6 = "https://radio.motioncorpbymmtc.id/index.php/on-duta/"
@@ -50,12 +50,17 @@ class RadioFragment : Fragment() {
     }
 
     private fun showSoftKeyboard(view: View) {
-
         if (view.requestFocus()) {
             val imm =
                 requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
         }
+    }
+
+    private fun hideSoftKeyboard(view: View) {
+        val imm =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -70,10 +75,7 @@ class RadioFragment : Fragment() {
         webSetting.setRenderPriority(WebSettings.RenderPriority.HIGH)
         myWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
 
-//        myWebView.settings.javaScriptEnabled = true
-
-        showSoftKeyboard(myWebView)
-
+        // showSoftKeyboard(myWebView)
 
         myWebView.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_BACK && event.action == MotionEvent.ACTION_UP && myWebView.canGoBack()) {
@@ -84,9 +86,7 @@ class RadioFragment : Fragment() {
         })
 
         myWebView.webViewClient = object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(
-                view: WebView?, url: String?
-            ): Boolean {
+            override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                 if (isExternalLink(url)) {
                     openExternalLink(url)
                     return true
@@ -94,22 +94,27 @@ class RadioFragment : Fragment() {
                     val result = MyAsyncTask(myWebView).execute(url).get()
                     when (result) {
                         url2 -> {
+                            showSoftKeyboard(myWebView)
                             removeHeaderStyleTv(myWebView)
                             return true
                         }
-
                         url3 -> {
+                            showSoftKeyboard(myWebView)
                             removeHeaderStyleTv(myWebView)
                             return true
                         }
-
-                        else -> return true
+                        else -> {
+                            if (url == url1) {
+                                hideSoftKeyboard(myWebView)
+                            }
+                            return false
+                        }
                     }
                 }
             }
 
 
-            override fun shouldInterceptRequest(
+    override fun shouldInterceptRequest(
                 view: WebView?, request: WebResourceRequest?
             ): WebResourceResponse? {
                 // Mengecek URL permintaan
