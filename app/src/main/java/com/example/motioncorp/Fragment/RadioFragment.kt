@@ -117,18 +117,14 @@ class RadioFragment : Fragment() {
     override fun shouldInterceptRequest(
                 view: WebView?, request: WebResourceRequest?
             ): WebResourceResponse? {
-                // Mengecek URL permintaan
                 val url = request?.url.toString()
 
-                // URL yang ingin Anda blokir
                 val blockedUrl = "https://organizations.minnit.chat/js/logjserror.js?mid=1693053978"
 
                 if (url == blockedUrl) {
-                    // Blokir permintaan ke URL yang Anda tentukan
                     return WebResourceResponse("text/javascript", "utf-8", null)
                 }
 
-                // Izinkan permintaan sumber eksternal lainnya
                 return super.shouldInterceptRequest(view, request)
                 Log.d("Minnit chat", "Blokir TTS")
             }

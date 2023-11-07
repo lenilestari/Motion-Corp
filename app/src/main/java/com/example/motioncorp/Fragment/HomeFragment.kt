@@ -244,6 +244,7 @@ class HomeFragment : Fragment() {
                 document.getElementsByClass("elementor-element elementor-element-1f524a1 elementor-widget elementor-widget-button").remove()
                 document.getElementsByClass("elementor-element elementor-element-5338298 elementor-mobile-align-right elementor-widget elementor-widget-button").remove()
                 document.getElementsByClass("elementor-element elementor-element-5d5bfb1 elementor-widget elementor-widget-image").remove()
+                document.getElementsByClass("elementor-element elementor-element-f5c6ba2 elementor-widget elementor-widget-button").remove()
             } catch (e: IOException) {
                 e.printStackTrace()
             }

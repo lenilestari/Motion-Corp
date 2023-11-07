@@ -3,6 +3,7 @@
     <style name="Base.Theme.MotionCorp.Dark" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">#1d434f</item>
         <item name="colorPrimaryDark">#FFFFFF</item>
+        <item name="android:textColor">@color/white</item>
 
     </style>
 

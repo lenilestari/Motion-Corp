@@ -42,6 +42,7 @@ class TelevisiFragment : Fragment() {
     private val url2 = "https://tv.motioncorpbymmtc.id/motion-tv-live"
     private val url3 = "https://radio.motioncorpbymmtc.id/motion-audio-live/"
     private var currentUrl: String = url1
+    private var currentUrl2: String? = null
 
     private var fullScreenUrl: String? = null
     private var isExitingFullScreen = false
@@ -87,7 +88,6 @@ class TelevisiFragment : Fragment() {
         webSetting.setRenderPriority(WebSettings.RenderPriority.HIGH)
         myWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
 
-        myWebView.canGoBack()
         myWebView.settings.javaScriptEnabled = true
 
         myWebView.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
@@ -107,6 +107,7 @@ class TelevisiFragment : Fragment() {
                     openExternalLink(url)
                     return true
                 } else {
+                    currentUrl2 = url
                     val result = MyAsyncTask(myWebView).execute(url).get()
                     when (result) {
                         url2 -> {
@@ -127,24 +128,6 @@ class TelevisiFragment : Fragment() {
                         }
                     }
                 }
-            }
-
-
-            override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
-                // Mengecek URL permintaan
-                val url = request?.url.toString()
-
-                // URL yang ingin Anda blokir
-                val blockedUrl = "https://organizations.minnit.chat/js/logjserror.js?mid=1693053978"
-
-                if (url == blockedUrl) {
-                    // Blokir permintaan ke URL yang Anda tentukan
-                    return WebResourceResponse("text/javascript", "utf-8", null)
-                }
-
-                // Izinkan permintaan sumber eksternal lainnya
-                return super.shouldInterceptRequest(view, request)
-                Log.d("Minnit chat", "Blokir TTS")
             }
         }
 
@@ -176,6 +159,8 @@ class TelevisiFragment : Fragment() {
                         customViewCallback = null
                     }
                     isExitingFullScreen = false
+                    currentUrl2?.let { myWebView.loadUrl(it) }
+                    currentUrl2 = null
                 }
             }
 
@@ -205,18 +190,17 @@ class TelevisiFragment : Fragment() {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
 
-        if (newConfig.keyboardHidden === Configuration.KEYBOARDHIDDEN_YES) {
+        if (newConfig.keyboardHidden == Configuration.KEYBOARDHIDDEN_YES) {
             Toast.makeText(requireContext(), "Keyboard available", Toast.LENGTH_SHORT).show()
-        } else if (newConfig.keyboardHidden === Configuration.KEYBOARDHIDDEN_NO) {
+        } else if (newConfig.keyboardHidden == Configuration.KEYBOARDHIDDEN_NO) {
             Toast.makeText(requireContext(), "No keyboard", Toast.LENGTH_SHORT).show()
         }
     }
 
-
     private fun removeHeaderStyleTv(myWebView: WebView) {
         myWebView.loadUrl(
             "javascript:(function() { " + "var head = document.getElementsByTagName('footer')[0];" + "head.parentNode.removeChild(head);" + "})()"
-        );
+        )
     }
 
     private inner class MyAsyncTask(private val webView: WebView) :
@@ -276,7 +260,6 @@ class TelevisiFragment : Fragment() {
                 window.speechSynthesis.getVoices = function() { return []; }; // Mengembalikan daftar suara kosong 
                 } 
             }
-
             """
 
             webView.post {
@@ -285,20 +268,20 @@ class TelevisiFragment : Fragment() {
         }
     }
 
-private fun isExternalLink(url: String?): Boolean {
-    val isExternal = url != null && (
-            url.startsWith("https://www.facebook.com/") ||
-                    url.startsWith("https://twitter.com/") || url.contains("twitter.com") ||
-                    url.startsWith("https://whatsapp.com/") || url.contains("whatsapp.com")
-            )
-    Log.d("ExternalLinkCheck", "URL: $url isExternal: $isExternal")
-    return isExternal
-}
+    private fun isExternalLink(url: String?): Boolean {
+        val isExternal = url != null && (
+                url.startsWith("https://www.facebook.com/") ||
+                        url.startsWith("https://twitter.com/") || url.contains("twitter.com") ||
+                        url.startsWith("https://whatsapp.com/") || url.contains("whatsapp.com")
+                )
+        Log.d("ExternalLinkCheck", "URL: $url isExternal: $isExternal")
+        return isExternal
+    }
 
-private fun openExternalLink(url: String?) {
-    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-    startActivity(browserIntent)
-}
+    private fun openExternalLink(url: String?) {
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(browserIntent)
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
